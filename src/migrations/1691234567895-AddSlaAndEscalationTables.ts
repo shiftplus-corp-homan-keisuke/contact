@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, Table, Index, ForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table, TableIndex, TableForeignKey } from 'typeorm';
 
 export class AddSlaAndEscalationTables1691234567895 implements MigrationInterface {
   name = 'AddSlaAndEscalationTables1691234567895';
@@ -188,63 +188,96 @@ export class AddSlaAndEscalationTables1691234567895 implements MigrationInterfac
     // インデックスの作成
     await queryRunner.createIndex(
       'sla_configs',
-      new Index('IDX_sla_configs_application_id', ['application_id']),
+      new TableIndex({
+        name: 'IDX_sla_configs_application_id',
+        columnNames: ['application_id'],
+      }),
     );
 
     await queryRunner.createIndex(
       'sla_configs',
-      new Index('IDX_sla_configs_priority_level', ['priority_level']),
+      new TableIndex({
+        name: 'IDX_sla_configs_priority_level',
+        columnNames: ['priority_level'],
+      }),
     );
 
     await queryRunner.createIndex(
       'sla_configs',
-      new Index('IDX_sla_configs_is_active', ['is_active']),
+      new TableIndex({
+        name: 'IDX_sla_configs_is_active',
+        columnNames: ['is_active'],
+      }),
     );
 
     await queryRunner.createIndex(
       'sla_violations',
-      new Index('IDX_sla_violations_inquiry_id', ['inquiry_id']),
+      new TableIndex({
+        name: 'IDX_sla_violations_inquiry_id',
+        columnNames: ['inquiry_id'],
+      }),
     );
 
     await queryRunner.createIndex(
       'sla_violations',
-      new Index('IDX_sla_violations_sla_config_id', ['sla_config_id']),
+      new TableIndex({
+        name: 'IDX_sla_violations_sla_config_id',
+        columnNames: ['sla_config_id'],
+      }),
     );
 
     await queryRunner.createIndex(
       'sla_violations',
-      new Index('IDX_sla_violations_violation_type', ['violation_type']),
+      new TableIndex({
+        name: 'IDX_sla_violations_violation_type',
+        columnNames: ['violation_type'],
+      }),
     );
 
     await queryRunner.createIndex(
       'sla_violations',
-      new Index('IDX_sla_violations_severity', ['severity']),
+      new TableIndex({
+        name: 'IDX_sla_violations_severity',
+        columnNames: ['severity'],
+      }),
     );
 
     await queryRunner.createIndex(
       'sla_violations',
-      new Index('IDX_sla_violations_is_escalated', ['is_escalated']),
+      new TableIndex({
+        name: 'IDX_sla_violations_is_escalated',
+        columnNames: ['is_escalated'],
+      }),
     );
 
     await queryRunner.createIndex(
       'sla_violations',
-      new Index('IDX_sla_violations_is_resolved', ['is_resolved']),
+      new TableIndex({
+        name: 'IDX_sla_violations_is_resolved',
+        columnNames: ['is_resolved'],
+      }),
     );
 
     await queryRunner.createIndex(
       'sla_violations',
-      new Index('IDX_sla_violations_violation_time', ['violation_time']),
+      new TableIndex({
+        name: 'IDX_sla_violations_violation_time',
+        columnNames: ['violation_time'],
+      }),
     );
 
     await queryRunner.createIndex(
       'sla_violations',
-      new Index('IDX_sla_violations_escalated_at', ['escalated_at']),
+      new TableIndex({
+        name: 'IDX_sla_violations_escalated_at',
+        columnNames: ['escalated_at'],
+      }),
     );
 
     // 外部キー制約の追加
     await queryRunner.createForeignKey(
       'sla_configs',
-      new ForeignKey({
+      new TableForeignKey({
         columnNames: ['application_id'],
         referencedColumnNames: ['id'],
         referencedTableName: 'applications',
@@ -254,7 +287,7 @@ export class AddSlaAndEscalationTables1691234567895 implements MigrationInterfac
 
     await queryRunner.createForeignKey(
       'sla_violations',
-      new ForeignKey({
+      new TableForeignKey({
         columnNames: ['inquiry_id'],
         referencedColumnNames: ['id'],
         referencedTableName: 'inquiries',
@@ -264,7 +297,7 @@ export class AddSlaAndEscalationTables1691234567895 implements MigrationInterfac
 
     await queryRunner.createForeignKey(
       'sla_violations',
-      new ForeignKey({
+      new TableForeignKey({
         columnNames: ['sla_config_id'],
         referencedColumnNames: ['id'],
         referencedTableName: 'sla_configs',
@@ -274,7 +307,7 @@ export class AddSlaAndEscalationTables1691234567895 implements MigrationInterfac
 
     await queryRunner.createForeignKey(
       'sla_violations',
-      new ForeignKey({
+      new TableForeignKey({
         columnNames: ['escalated_to_user_id'],
         referencedColumnNames: ['id'],
         referencedTableName: 'users',
@@ -292,12 +325,15 @@ export class AddSlaAndEscalationTables1691234567895 implements MigrationInterfac
 
     await queryRunner.createIndex(
       'users',
-      new Index('IDX_users_manager_id', ['manager_id']),
+      new TableIndex({
+        name: 'IDX_users_manager_id',
+        columnNames: ['manager_id'],
+      }),
     );
 
     await queryRunner.createForeignKey(
       'users',
-      new ForeignKey({
+      new TableForeignKey({
         columnNames: ['manager_id'],
         referencedColumnNames: ['id'],
         referencedTableName: 'users',

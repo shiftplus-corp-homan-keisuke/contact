@@ -301,7 +301,7 @@ export class TemplateService {
   async rateTemplateEffectiveness(effectivenessDto: TemplateEffectivenessDto, userId: string): Promise<void> {
     this.logger.log(`テンプレート効果評価開始: usageId=${effectivenessDto.usageId}, rating=${effectivenessDto.rating}`);
 
-    const usage = await this.templateRepository.usageRepository.findOne({
+    const usage = await this.templateRepository['usageRepository'].findOne({
       where: { id: effectivenessDto.usageId },
       relations: ['template'],
     });
@@ -322,7 +322,7 @@ export class TemplateService {
     }
 
     // 使用履歴更新
-    await this.templateRepository.usageRepository.update(effectivenessDto.usageId, {
+    await this.templateRepository['usageRepository'].update(effectivenessDto.usageId, {
       effectivenessRating: effectivenessDto.rating,
       feedbackComment: effectivenessDto.comment,
     });
@@ -611,7 +611,13 @@ export class TemplateService {
       totalUsage: template.usageCount,
       averageEffectiveness: template.effectivenessScore || 0,
       popularVariables: [],
-      usageByContext: {},
+      usageByContext: {
+        response: 0,
+        email: 0,
+        chat: 0,
+        sms: 0,
+        notification: 0,
+      },
       usageByUser: [],
       usageTrend: [],
     };

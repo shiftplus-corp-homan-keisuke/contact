@@ -336,4 +336,14 @@ export class RealtimeNotificationService {
     await this.notificationGateway.sendToAll(wsNotification);
     this.logger.log(`システム通知を送信: ${title}`);
   }
+
+  /**
+   * 特定のロールのユーザーに通知を送信
+   */
+  async sendToRoles(roles: string[], notification: any): Promise<void> {
+    for (const role of roles) {
+      await this.notificationGateway.sendToRoom(role, notification);
+    }
+    this.logger.log(`ロール ${roles.join(', ')} に通知を送信: ${notification.title || notification.subject}`);
+  }
 }

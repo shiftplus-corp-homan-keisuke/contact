@@ -36,6 +36,8 @@ describe('WorkflowService', () => {
     assignedUser: null,
     responses: [],
     statusHistory: [],
+    templateUsages: [],
+    files: [],
   };
 
   const mockUser: User = {
@@ -52,6 +54,8 @@ describe('WorkflowService', () => {
     responses: [],
     history: [],
     changedHistory: [],
+    templates: [],
+    templateUsages: [],
   };
 
   const mockStatusHistory: InquiryStatusHistory = {

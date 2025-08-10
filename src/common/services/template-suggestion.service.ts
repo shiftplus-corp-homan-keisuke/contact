@@ -56,24 +56,28 @@ export class TemplateSuggestionService {
 
     try {
       // 1. ハイブリッド検索でテンプレート候補を取得
+      const searchDto = {
+        query: options.content,
+        limit: options.limit ? options.limit * 3 : 30,
+        page: 1,
+        skip: 0,
+        appId: options.appId,
+        category: options.category ? [options.category] : undefined,
+      };
+      
       const searchResults = await this.hybridSearchService.hybridSearch(
-        options.content,
+        searchDto,
         {
           vectorWeight: 0.7,
           textWeight: 0.3,
           limit: options.limit ? options.limit * 3 : 30, // 多めに取得してフィルタリング
-          filters: {
-            type: 'template',
-            appId: options.appId,
-            category: options.category,
-          },
         }
       );
 
       // 2. テンプレート詳細情報を取得
       const templateSuggestions: TemplateSuggestion[] = [];
       
-      for (const result of searchResults) {
+      for (const result of searchResults.items) {
         const template = await this.templateRepository.findById(result.id);
         if (!template || !template.isActive) continue;
 
@@ -160,7 +164,7 @@ export class TemplateSuggestionService {
           matchedKeywords: [],
           usageCount: template.usageCount,
           effectivenessScore: template.effectivenessScore,
-          usageStats,
+          // usageStats,
         });
 
         if (popularTemplates.length >= limit) break;
@@ -254,7 +258,7 @@ export class TemplateSuggestionService {
           matchedKeywords: [],
           usageCount: template.usageCount,
           effectivenessScore: template.effectivenessScore,
-          usageStats,
+          // usageStats,
         });
 
         if (recommendations.length >= limit) break;

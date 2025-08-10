@@ -32,6 +32,7 @@ describe('FAQSiteService', () => {
     inquiries: [],
     faqs: [],
     apiKeys: [],
+    templates: [],
   };
 
   const mockFAQs: FAQ[] = [

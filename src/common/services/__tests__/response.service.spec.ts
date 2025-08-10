@@ -39,6 +39,8 @@ describe('ResponseService', () => {
     assignedUser: null,
     responses: [],
     statusHistory: [],
+    templateUsages: [],
+    files: [],
   };
 
   const mockUser: User = {
@@ -55,6 +57,8 @@ describe('ResponseService', () => {
     responses: [],
     history: [],
     changedHistory: [],
+    templates: [],
+    templateUsages: [],
   };
 
   const mockResponse: Response = {
@@ -68,6 +72,7 @@ describe('ResponseService', () => {
     inquiry: mockInquiry,
     user: mockUser,
     history: [],
+    templateUsages: [],
   };
 
   const mockResponseHistory: ResponseHistory = {

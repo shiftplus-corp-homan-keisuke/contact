@@ -22,7 +22,7 @@ export class NotificationService {
 
   constructor(private readonly configService: ConfigService) {
     // メール送信設定
-    this.emailTransporter = nodemailer.createTransporter({
+    this.emailTransporter = nodemailer.createTransport({
       host: this.configService.get<string>('SMTP_HOST', 'localhost'),
       port: this.configService.get<number>('SMTP_PORT', 587),
       secure: this.configService.get<boolean>('SMTP_SECURE', false),

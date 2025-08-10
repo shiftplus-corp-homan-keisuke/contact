@@ -479,7 +479,7 @@ export class TemplateMacroService {
       const finalValue = value !== undefined ? value : templateVar.defaultValue || '';
       
       // 型に応じたフォーマット
-      const formattedValue = this.formatVariableValue(finalValue, templateVar.type);
+      const formattedValue = this.formatVariableValue(finalValue, templateVar.type as any);
       
       const regex = new RegExp(`\\{\\{\\s*${templateVar.name}\\s*\\}\\}`, 'g');
       substitutedContent = substitutedContent.replace(regex, formattedValue);

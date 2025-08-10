@@ -247,8 +247,8 @@ export class FileStorageService {
         try {
           // ファイルパスからデータベースレコードを検索
           const dbFile = await this.fileRepository.findOne({
-            where: { filePath: physicalFile }
-          });
+            filePath: physicalFile
+          } as any);
 
           if (!dbFile) {
             // データベースに記録がない孤立ファイル

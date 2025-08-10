@@ -85,7 +85,7 @@ export class FileService {
       const savedFilePath = await this.saveFile(file, fileHash);
 
       // データベースに保存
-      const fileEntity = this.fileRepository.create({
+      const savedFile = await this.fileRepository.create({
         filename: this.generateUniqueFilename(file.originalname),
         originalFilename: file.originalname,
         size: file.size,
@@ -98,8 +98,6 @@ export class FileService {
         scanResult: FileScanResult.PENDING,
         isScanned: false
       });
-
-      const savedFile = await this.fileRepository.save(fileEntity);
 
       return {
         success: true,
@@ -198,8 +196,7 @@ export class FileService {
     }
 
     // 更新
-    Object.assign(file, updates);
-    const updatedFile = await this.fileRepository.save(file);
+    const updatedFile = await this.fileRepository.update(file.id, updates);
 
     return this.mapToFileMetadata(updatedFile);
   }
@@ -413,7 +410,7 @@ export class FileService {
       uploadedBy: file.uploadedBy,
       uploadedAt: file.uploadedAt,
       isScanned: file.isScanned,
-      scanResult: file.scanResult,
+      scanResult: file.scanResult as FileScanResult,
       scannedAt: file.scannedAt,
       description: file.description,
       downloadCount: file.downloadCount,
