@@ -20,7 +20,7 @@ import {
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { PermissionsGuard } from '../guards/permissions.guard';
-import { Permissions } from '../decorators/permissions.decorator';
+import { RequirePermission } from '../decorators/permissions.decorator';
 import { CurrentUser } from '../decorators/current-user.decorator';
 import { FileSecurityService } from '../services/file-security.service';
 import {
@@ -55,7 +55,7 @@ export class FileSecurityController {
     description: 'スキャン実行成功',
     type: FileScanResultDto
   })
-  @Permissions('file:scan')
+  @RequirePermission('file', 'scan')
   async scanFile(
     @Param('fileId', ParseUUIDPipe) fileId: string,
     @CurrentUser() user: User,
@@ -72,15 +72,11 @@ export class FileSecurityController {
 
     const scanResult = await this.fileSecurityService.scanFile(fileId);
 
-    return {
-      success: true,
-      data: {
-        fileId,
-        scanResult,
-        scannedAt: new Date()
-      } as FileScanResultDto,
-      message: 'ファイルスキャンが完了しました'
-    };
+    return new BaseResponseDto({
+      fileId,
+      scanResult,
+      scannedAt: new Date()
+    } as FileScanResultDto, true, 'ファイルスキャンが完了しました');
   }
 
   /**
@@ -94,16 +90,13 @@ export class FileSecurityController {
     description: 'アクセス統計取得成功',
     type: FileAccessStatsDto
   })
-  @Permissions('file:admin')
+  @RequirePermission('file', 'admin')
   async getFileAccessStatistics(
     @Param('fileId', ParseUUIDPipe) fileId: string
   ): Promise<BaseResponseDto<FileAccessStatsDto>> {
     const stats = await this.fileSecurityService.getFileAccessStatistics(fileId);
 
-    return {
-      success: true,
-      data: stats as FileAccessStatsDto
-    };
+    return new BaseResponseDto(stats as FileAccessStatsDto);
   }
 
   /**
@@ -118,7 +111,7 @@ export class FileSecurityController {
     description: '疑わしいアクティビティ検出結果',
     type: SuspiciousActivityDto
   })
-  @Permissions('file:admin')
+  @RequirePermission('file', 'admin')
   async detectSuspiciousActivity(
     @Param('userId', ParseUUIDPipe) userId: string,
     @Query('timeWindow') timeWindow?: number
@@ -128,10 +121,7 @@ export class FileSecurityController {
       timeWindow || 60
     );
 
-    return {
-      success: true,
-      data: result as SuspiciousActivityDto
-    };
+    return new BaseResponseDto(result as SuspiciousActivityDto);
   }
 
   /**
@@ -146,7 +136,7 @@ export class FileSecurityController {
     description: 'セキュリティレポート生成成功',
     type: SecurityReportDto
   })
-  @Permissions('file:admin')
+  @RequirePermission('file', 'admin')
   async generateSecurityReport(
     @Query('startDate') startDate: string,
     @Query('endDate') endDate: string
@@ -156,10 +146,7 @@ export class FileSecurityController {
 
     const report = await this.fileSecurityService.generateSecurityReport(start, end);
 
-    return {
-      success: true,
-      data: report as SecurityReportDto
-    };
+    return new BaseResponseDto(report as SecurityReportDto);
   }
 
   /**
@@ -178,7 +165,7 @@ export class FileSecurityController {
     status: HttpStatus.OK,
     description: 'アクセス権限チェック結果'
   })
-  @Permissions('file:read')
+  @RequirePermission('file', 'read')
   async checkFileAccess(
     @Param('fileId', ParseUUIDPipe) fileId: string,
     @Query('permission') permission: 'read' | 'write' | 'delete' | 'admin',
@@ -190,10 +177,7 @@ export class FileSecurityController {
       permission as any
     );
 
-    return {
-      success: true,
-      data: { hasAccess }
-    };
+    return new BaseResponseDto({ hasAccess });
   }
 
   /**
@@ -209,7 +193,7 @@ export class FileSecurityController {
     description: 'アクセスログ取得成功',
     type: [FileAccessLogDto]
   })
-  @Permissions('file:admin')
+  @RequirePermission('file', 'admin')
   async getFileAccessLogs(
     @Param('fileId', ParseUUIDPipe) fileId: string,
     @Query('page') page = 1,
@@ -220,18 +204,15 @@ export class FileSecurityController {
     const logs = [];
     const total = 0;
 
-    return {
-      success: true,
-      data: {
-        items: logs,
-        total,
-        page: Number(page),
-        limit: Number(limit),
-        totalPages: Math.ceil(total / Number(limit)),
-        hasNext: Number(page) * Number(limit) < total,
-        hasPrev: Number(page) > 1
-      }
-    };
+    return new BaseResponseDto({
+      items: logs,
+      total,
+      page: Number(page),
+      limit: Number(limit),
+      totalPages: Math.ceil(total / Number(limit)),
+      hasNext: Number(page) * Number(limit) < total,
+      hasPrev: Number(page) > 1
+    });
   }
 
   /**
@@ -245,7 +226,7 @@ export class FileSecurityController {
     status: HttpStatus.OK,
     description: '一括スキャン実行成功'
   })
-  @Permissions('file:admin')
+  @RequirePermission('file', 'admin')
   async bulkScanFiles(
     @Query('scanPending') scanPending = true,
     @Query('limit') limit = 100
@@ -264,10 +245,6 @@ export class FileSecurityController {
       suspiciousCount: 0
     };
 
-    return {
-      success: true,
-      data: result,
-      message: `${result.processedCount}個のファイルをスキャンしました`
-    };
+    return new BaseResponseDto(result, true, `${result.processedCount}個のファイルをスキャンしました`);
   }
 }

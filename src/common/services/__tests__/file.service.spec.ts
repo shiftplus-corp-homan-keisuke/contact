@@ -104,8 +104,7 @@ describe('FileService', () => {
     it('有効なファイルをアップロードできること', async () => {
       // Arrange
       fileRepository.findByFileHash.mockResolvedValue(null);
-      fileRepository.create.mockReturnValue(mockFile as File);
-      fileRepository.save.mockResolvedValue(mockFile as File);
+      fileRepository.create.mockResolvedValue(mockFile as File);
 
       // Act
       const result = await service.uploadFile(

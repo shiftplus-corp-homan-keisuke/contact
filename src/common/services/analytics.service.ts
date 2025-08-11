@@ -1597,7 +1597,8 @@ export class AnalyticsService {
           lower: predictedValue * 0.8,
           upper: predictedValue * 1.2
         },
-        accuracy: Math.max(0.6, 1 - (i * 0.05)) // 日数が増えるほど精度低下
+        accuracy: Math.max(0.6, 1 - (i * 0.05)), // 日数が増えるほど精度低下
+        confidenceLevel: 0.95 // 95%信頼区間
       });
     }
 

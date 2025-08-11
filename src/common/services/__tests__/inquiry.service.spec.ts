@@ -37,6 +37,8 @@ describe('InquiryService', () => {
     assignedUser: null,
     responses: [],
     statusHistory: [],
+    templateUsages: [],
+    files: [],
   };
 
   const mockApplication: Application = {
@@ -49,6 +51,7 @@ describe('InquiryService', () => {
     inquiries: [],
     faqs: [],
     apiKeys: [],
+    templates: [],
   };
 
   const mockUser: User = {
@@ -65,6 +68,8 @@ describe('InquiryService', () => {
     responses: [],
     history: [],
     changedHistory: [],
+    templates: [],
+    templateUsages: [],
   };
 
   beforeEach(async () => {

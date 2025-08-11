@@ -35,6 +35,7 @@ describe('FAQRepository', () => {
       inquiries: [],
       faqs: [],
       apiKeys: [],
+      templates: [],
     },
   };
 

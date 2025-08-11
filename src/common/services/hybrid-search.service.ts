@@ -463,4 +463,28 @@ export class HybridSearchService {
       expectedImprovement,
     };
   }
+
+  /**
+   * テキストをベクトル化する
+   * VectorServiceのembedTextメソッドを呼び出す
+   */
+  async embedText(text: string): Promise<number[]> {
+    return this.vectorService.embedText(text);
+  }
+
+  /**
+   * ベクトルを保存する
+   * VectorServiceのstoreVectorメソッドを呼び出す
+   */
+  async storeVector(id: string, vector: number[], metadata: any): Promise<void> {
+    return this.vectorService.storeVector(id, vector, metadata);
+  }
+
+  /**
+   * ベクトルを更新する
+   * VectorServiceのupdateVectorメソッドを呼び出す
+   */
+  async updateVector(id: string, vector: number[], metadata: any): Promise<void> {
+    return this.vectorService.updateVector(id, vector, metadata);
+  }
 }

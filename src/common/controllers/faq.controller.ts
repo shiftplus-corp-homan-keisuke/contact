@@ -17,6 +17,7 @@ import {
   UseGuards,
   Logger,
   ParseUUIDPipe,
+  NotFoundException,
 } from '@nestjs/common';
 import {
   ApiTags,

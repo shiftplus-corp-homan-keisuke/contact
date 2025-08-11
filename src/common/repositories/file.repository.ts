@@ -372,4 +372,24 @@ export class FileRepository extends BaseRepository<File> {
       .limit(limit)
       .getMany();
   }
+
+  /**
+   * TypeORMのfindメソッドを公開
+   */
+  async find(options?: any): Promise<File[]> {
+    return this.fileRepository.find(options);
+  }
+
+  /**
+   * TypeORMのsaveメソッドを公開
+   */
+  async save(entity: File): Promise<File>;
+  async save(entities: File[]): Promise<File[]>;
+  async save(entity: File | File[]): Promise<File | File[]> {
+    if (Array.isArray(entity)) {
+      return this.fileRepository.save(entity);
+    } else {
+      return this.fileRepository.save(entity);
+    }
+  }
 }

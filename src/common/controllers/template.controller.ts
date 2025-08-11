@@ -78,11 +78,7 @@ export class TemplateController {
   ): Promise<BaseResponseDto<TemplateResponseDto>> {
     const template = await this.templateService.createTemplate(createTemplateDto, req.user.id);
     
-    return {
-      success: true,
-      data: template,
-      message: 'テンプレートが正常に作成されました',
-    };
+    return new BaseResponseDto(template, true, 'テンプレートが正常に作成されました');
   }
 
   /**
@@ -107,10 +103,7 @@ export class TemplateController {
   ): Promise<BaseResponseDto<TemplateResponseDto>> {
     const template = await this.templateService.getTemplate(id, req.user.id);
     
-    return {
-      success: true,
-      data: template,
-    };
+    return new BaseResponseDto(template);
   }
 
   /**
@@ -142,11 +135,7 @@ export class TemplateController {
   ): Promise<BaseResponseDto<TemplateResponseDto>> {
     const template = await this.templateService.updateTemplate(id, updateTemplateDto, req.user.id);
     
-    return {
-      success: true,
-      data: template,
-      message: 'テンプレートが正常に更新されました',
-    };
+    return new BaseResponseDto(template, true, 'テンプレートが正常に更新されました');
   }
 
   /**
@@ -175,11 +164,7 @@ export class TemplateController {
   ): Promise<BaseResponseDto<null>> {
     await this.templateService.deleteTemplate(id, req.user.id);
     
-    return {
-      success: true,
-      data: null,
-      message: 'テンプレートが正常に削除されました',
-    };
+    return new BaseResponseDto(null, true, 'テンプレートが正常に削除されました');
   }
 
   /**
@@ -212,16 +197,13 @@ export class TemplateController {
     limit: number;
   }>> {
     // タグの文字列を配列に変換
-    if (typeof searchDto.tags === 'string') {
-      searchDto.tags = searchDto.tags.split(',').map(tag => tag.trim());
+    if (searchDto.tags && typeof searchDto.tags === 'string') {
+      searchDto.tags = (searchDto.tags as string).split(',').map(tag => tag.trim());
     }
 
     const result = await this.templateService.searchTemplates(searchDto, req.user.id);
     
-    return {
-      success: true,
-      data: result,
-    };
+    return new BaseResponseDto(result);
   }
 
   /**
@@ -251,11 +233,7 @@ export class TemplateController {
   ): Promise<BaseResponseDto<TemplateUsageResultDto>> {
     const result = await this.templateService.useTemplate(useTemplateDto, req.user.id);
     
-    return {
-      success: true,
-      data: result,
-      message: 'テンプレートが正常に処理されました',
-    };
+    return new BaseResponseDto(result, true, 'テンプレートが正常に処理されました');
   }
 
   /**
@@ -276,11 +254,7 @@ export class TemplateController {
   ): Promise<BaseResponseDto<any[]>> {
     const suggestions = await this.templateService.suggestTemplates(suggestionDto, req.user.id);
     
-    return {
-      success: true,
-      data: suggestions,
-      message: `${suggestions.length}件のテンプレートを提案しました`,
-    };
+    return new BaseResponseDto(suggestions, true, `${suggestions.length}件のテンプレートを提案しました`);
   }
 
   /**
@@ -298,7 +272,7 @@ export class TemplateController {
     description: '人気テンプレート一覧',
   })
   async getPopularTemplates(
-    @Query('limit') limit?: number,
+    @Query('limit') limit: number = 10,
     @Query('appId') appId?: string,
     @Query('category') category?: string,
     @Request() req?: any,
@@ -309,10 +283,7 @@ export class TemplateController {
       req?.user?.id,
     );
     
-    return {
-      success: true,
-      data: templates,
-    };
+    return new BaseResponseDto(templates);
   }
 
   /**
@@ -328,19 +299,15 @@ export class TemplateController {
     description: '個人化テンプレート推奨結果',
   })
   async getPersonalizedRecommendations(
-    @Query('limit') limit?: number,
     @Request() req: any,
+    @Query('limit') limit?: number,
   ): Promise<BaseResponseDto<any[]>> {
     const recommendations = await this.templateService.getPersonalizedTemplateRecommendations(
       req.user.id,
       limit || 5,
     );
     
-    return {
-      success: true,
-      data: recommendations,
-      message: `${recommendations.length}件のテンプレートを推奨しました`,
-    };
+    return new BaseResponseDto(recommendations, true, `${recommendations.length}件のテンプレートを推奨しました`);
   }
 
   /**
@@ -361,10 +328,7 @@ export class TemplateController {
   ): Promise<BaseResponseDto<any>> {
     const effectiveness = await this.templateService.measureTemplateEffectiveness(id, req.user.id);
     
-    return {
-      success: true,
-      data: effectiveness,
-    };
+    return new BaseResponseDto(effectiveness);
   }
 
   /**
@@ -393,11 +357,7 @@ export class TemplateController {
   ): Promise<BaseResponseDto<null>> {
     await this.templateService.rateTemplateEffectiveness(effectivenessDto, req.user.id);
     
-    return {
-      success: true,
-      data: null,
-      message: '評価が正常に記録されました',
-    };
+    return new BaseResponseDto(null, true, '評価が正常に記録されました');
   }
 
   /**
@@ -427,10 +387,7 @@ export class TemplateController {
   ): Promise<BaseResponseDto<TemplateStatisticsDto>> {
     const statistics = await this.templateService.getTemplateStatistics(id, req.user.id);
     
-    return {
-      success: true,
-      data: statistics,
-    };
+    return new BaseResponseDto(statistics);
   }
 
   /**
@@ -466,11 +423,7 @@ export class TemplateController {
       req.user.id,
     );
     
-    return {
-      success: true,
-      data: result,
-      message: 'マクロが正常に展開されました',
-    };
+    return new BaseResponseDto(result, true, 'マクロが正常に展開されました');
   }
 
   /**
@@ -491,10 +444,7 @@ export class TemplateController {
   ): Promise<BaseResponseDto<any[]>> {
     const template = await this.templateService.getTemplate(id, req.user.id);
     
-    return {
-      success: true,
-      data: template.variables,
-    };
+    return new BaseResponseDto(template.variables);
   }
 
   /**
@@ -533,15 +483,11 @@ export class TemplateController {
 
     const result = await this.templateService.useTemplate(useDto, req.user.id);
     
-    return {
-      success: true,
-      data: {
-        content: result.content,
-        variables: result.variables,
-        errors: result.errors,
-        isPreview: true,
-      },
-      message: 'プレビューが生成されました',
-    };
+    return new BaseResponseDto({
+      content: result.content,
+      variables: result.variables,
+      errors: result.errors,
+      isPreview: true,
+    }, true, 'プレビューが生成されました');
   }
 }

@@ -28,7 +28,7 @@ import {
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { PermissionsGuard } from '../guards/permissions.guard';
-import { Permissions } from '../decorators/permissions.decorator';
+import { RequirePermission } from '../decorators/permissions.decorator';
 import { CurrentUser } from '../decorators/current-user.decorator';
 import { FileService } from '../services/file.service';
 import {
@@ -68,7 +68,7 @@ export class FileController {
     status: HttpStatus.BAD_REQUEST,
     description: 'バリデーションエラー'
   })
-  @Permissions('file:create')
+  @RequirePermission('file', 'create')
   @UseInterceptors(FileInterceptor('file', {
     limits: {
       fileSize: 10 * 1024 * 1024, // 10MB
@@ -112,11 +112,28 @@ export class FileController {
       throw new BadRequestException(result.error);
     }
 
-    return {
-      success: true,
-      data: result.file as FileResponseDto,
-      message: 'ファイルアップロードが完了しました'
+    // FileMetadataをFileResponseDtoに変換
+    const fileResponse: FileResponseDto = {
+      id: result.file.id,
+      filename: result.file.filename,
+      originalFilename: result.file.originalFilename,
+      size: result.file.size,
+      mimeType: result.file.mimeType,
+      inquiryId: result.file.inquiryId,
+      uploadedBy: result.file.uploadedBy,
+      uploadedAt: result.file.uploadedAt,
+      isScanned: result.file.isScanned,
+      scanResult: result.file.scanResult as 'clean' | 'infected' | 'suspicious' | 'pending',
+      scannedAt: result.file.scannedAt,
+      description: result.file.description,
+      downloadCount: result.file.downloadCount,
+      lastDownloadedAt: result.file.lastDownloadedAt,
+      expiresAt: result.file.expiresAt,
+      createdAt: result.file.uploadedAt, // FileMetadataにはcreatedAtがないのでuploadedAtを使用
+      updatedAt: result.file.uploadedAt  // FileMetadataにはupdatedAtがないのでuploadedAtを使用
     };
+
+    return new BaseResponseDto(fileResponse, true, 'ファイルアップロードが完了しました');
   }
 
   /**
@@ -134,16 +151,34 @@ export class FileController {
     status: HttpStatus.NOT_FOUND,
     description: 'ファイルが見つかりません'
   })
-  @Permissions('file:read')
+  @RequirePermission('file', 'read')
   async getFile(
     @Param('fileId', ParseUUIDPipe) fileId: string
   ): Promise<BaseResponseDto<FileResponseDto>> {
     const file = await this.fileService.getFile(fileId);
 
-    return {
-      success: true,
-      data: file as FileResponseDto
+    // FileMetadataをFileResponseDtoに変換
+    const fileResponse: FileResponseDto = {
+      id: file.id,
+      filename: file.filename,
+      originalFilename: file.originalFilename,
+      size: file.size,
+      mimeType: file.mimeType,
+      inquiryId: file.inquiryId,
+      uploadedBy: file.uploadedBy,
+      uploadedAt: file.uploadedAt,
+      isScanned: file.isScanned,
+      scanResult: file.scanResult as 'clean' | 'infected' | 'suspicious' | 'pending',
+      scannedAt: file.scannedAt,
+      description: file.description,
+      downloadCount: file.downloadCount,
+      lastDownloadedAt: file.lastDownloadedAt,
+      expiresAt: file.expiresAt,
+      createdAt: file.uploadedAt,
+      updatedAt: file.uploadedAt
     };
+
+    return new BaseResponseDto(fileResponse);
   }
 
   /**
@@ -160,7 +195,7 @@ export class FileController {
     status: HttpStatus.NOT_FOUND,
     description: 'ファイルが見つかりません'
   })
-  @Permissions('file:read')
+  @RequirePermission('file', 'read')
   async downloadFile(
     @Param('fileId', ParseUUIDPipe) fileId: string,
     @CurrentUser() user: User,
@@ -188,16 +223,34 @@ export class FileController {
     description: 'ファイル一覧取得成功',
     type: [FileResponseDto]
   })
-  @Permissions('file:read')
+  @RequirePermission('file', 'read')
   async getFilesByInquiry(
     @Param('inquiryId', ParseUUIDPipe) inquiryId: string
   ): Promise<BaseResponseDto<FileResponseDto[]>> {
     const files = await this.fileService.getFilesByInquiry(inquiryId);
 
-    return {
-      success: true,
-      data: files as FileResponseDto[]
-    };
+    // FileMetadata[]をFileResponseDto[]に変換
+    const fileResponses: FileResponseDto[] = files.map(file => ({
+      id: file.id,
+      filename: file.filename,
+      originalFilename: file.originalFilename,
+      size: file.size,
+      mimeType: file.mimeType,
+      inquiryId: file.inquiryId,
+      uploadedBy: file.uploadedBy,
+      uploadedAt: file.uploadedAt,
+      isScanned: file.isScanned,
+      scanResult: file.scanResult as 'clean' | 'infected' | 'suspicious' | 'pending',
+      scannedAt: file.scannedAt,
+      description: file.description,
+      downloadCount: file.downloadCount,
+      lastDownloadedAt: file.lastDownloadedAt,
+      expiresAt: file.expiresAt,
+      createdAt: file.uploadedAt,
+      updatedAt: file.uploadedAt
+    }));
+
+    return new BaseResponseDto(fileResponses);
   }
 
   /**
@@ -220,7 +273,7 @@ export class FileController {
     status: HttpStatus.OK,
     description: 'ファイル検索成功'
   })
-  @Permissions('file:read')
+  @RequirePermission('file', 'read')
   async searchFiles(
     @Query() searchDto: FileSearchDto
   ): Promise<BaseResponseDto<any>> {
@@ -228,7 +281,7 @@ export class FileController {
       inquiryId: searchDto.inquiryId,
       uploadedBy: searchDto.uploadedBy,
       mimeType: searchDto.mimeType,
-      scanResult: searchDto.scanResult,
+      scanResult: searchDto.scanResult as any, // FileScanResult enumに変換
       uploadedAfter: searchDto.uploadedAfter ? new Date(searchDto.uploadedAfter) : undefined,
       uploadedBefore: searchDto.uploadedBefore ? new Date(searchDto.uploadedBefore) : undefined,
       filename: searchDto.filename,
@@ -243,10 +296,7 @@ export class FileController {
       searchDto.limit || 20
     );
 
-    return {
-      success: true,
-      data: result
-    };
+    return new BaseResponseDto(result);
   }
 
   /**
@@ -264,7 +314,7 @@ export class FileController {
     status: HttpStatus.NOT_FOUND,
     description: 'ファイルが見つかりません'
   })
-  @Permissions('file:update')
+  @RequirePermission('file', 'update')
   async updateFile(
     @Param('fileId', ParseUUIDPipe) fileId: string,
     @Body() updateDto: FileUpdateDto,
@@ -277,11 +327,28 @@ export class FileController {
 
     const file = await this.fileService.updateFile(fileId, updates, user.id);
 
-    return {
-      success: true,
-      data: file as FileResponseDto,
-      message: 'ファイル情報を更新しました'
+    // FileMetadataをFileResponseDtoに変換
+    const fileResponse: FileResponseDto = {
+      id: file.id,
+      filename: file.filename,
+      originalFilename: file.originalFilename,
+      size: file.size,
+      mimeType: file.mimeType,
+      inquiryId: file.inquiryId,
+      uploadedBy: file.uploadedBy,
+      uploadedAt: file.uploadedAt,
+      isScanned: file.isScanned,
+      scanResult: file.scanResult as 'clean' | 'infected' | 'suspicious' | 'pending',
+      scannedAt: file.scannedAt,
+      description: file.description,
+      downloadCount: file.downloadCount,
+      lastDownloadedAt: file.lastDownloadedAt,
+      expiresAt: file.expiresAt,
+      createdAt: file.uploadedAt,
+      updatedAt: file.uploadedAt
     };
+
+    return new BaseResponseDto(fileResponse, true, 'ファイル情報を更新しました');
   }
 
   /**
@@ -298,7 +365,7 @@ export class FileController {
     status: HttpStatus.NOT_FOUND,
     description: 'ファイルが見つかりません'
   })
-  @Permissions('file:delete')
+  @RequirePermission('file', 'delete')
   async deleteFile(
     @Param('fileId', ParseUUIDPipe) fileId: string,
     @CurrentUser() user: User
@@ -309,10 +376,7 @@ export class FileController {
       throw new BadRequestException(result.error);
     }
 
-    return {
-      success: true,
-      message: 'ファイルを削除しました'
-    };
+    return new BaseResponseDto(null, true, 'ファイルを削除しました');
   }
 
   /**
@@ -325,14 +389,11 @@ export class FileController {
     description: 'ファイル統計情報取得成功',
     type: FileStatsDto
   })
-  @Permissions('file:admin')
+  @RequirePermission('file', 'admin')
   async getFileStatistics(): Promise<BaseResponseDto<FileStatsDto>> {
     const stats = await this.fileService.getFileStatistics();
 
-    return {
-      success: true,
-      data: stats as FileStatsDto
-    };
+    return new BaseResponseDto(stats as FileStatsDto);
   }
 
   /**
@@ -344,14 +405,11 @@ export class FileController {
     status: HttpStatus.OK,
     description: 'ストレージ使用量取得成功'
   })
-  @Permissions('file:admin')
+  @RequirePermission('file', 'admin')
   async getStorageUsage(): Promise<BaseResponseDto<any>> {
     const usage = await this.fileService.getStorageUsage();
 
-    return {
-      success: true,
-      data: usage
-    };
+    return new BaseResponseDto(usage);
   }
 
   /**
@@ -363,14 +421,10 @@ export class FileController {
     status: HttpStatus.OK,
     description: 'クリーンアップ実行成功'
   })
-  @Permissions('file:admin')
+  @RequirePermission('file', 'admin')
   async cleanupExpiredFiles(): Promise<BaseResponseDto<any>> {
     const result = await this.fileService.cleanupExpiredFiles();
 
-    return {
-      success: true,
-      data: result,
-      message: `${result.cleanedFileCount}個のファイルをクリーンアップしました`
-    };
+    return new BaseResponseDto(result, true, `${result.cleanedFileCount}個のファイルをクリーンアップしました`);
   }
 }

@@ -268,7 +268,8 @@ describe('AnalyticsController - Performance Analysis', () => {
             timestamp: '2024-02-01',
             predictedValue: 13.5,
             confidenceInterval: { lower: 10.8, upper: 16.2 },
-            accuracy: 0.85
+            accuracy: 0.85,
+            confidenceLevel: 0.95
           }
         ]
       };

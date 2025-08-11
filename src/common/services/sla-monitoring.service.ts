@@ -59,8 +59,8 @@ export class SlaMonitoringService {
     // 対象の問い合わせを取得（未解決かつ該当アプリケーション）
     const inquiries = await this.inquiryRepository.find({
       where: {
-        applicationId: slaConfig.applicationId,
-        status: 'open', // 未解決の問い合わせのみ
+        appId: slaConfig.applicationId,
+        status: 'open' as any, // 未解決の問い合わせのみ
       },
       relations: ['responses'],
     });
@@ -333,9 +333,13 @@ export class SlaMonitoringService {
     // 管理者とサポート担当者に通知
     await this.realtimeNotificationService.sendToRoles(
       ['admin', 'support'],
-      'SLA違反が発生しました',
-      `問い合わせ ${inquiry.id} でSLA違反が発生しました（${violation.violationType}）`,
-      notificationData,
+      {
+        type: 'sla_violation',
+        title: 'SLA違反が発生しました',
+        message: `問い合わせ ${inquiry.id} でSLA違反が発生しました（${violation.violationType}）`,
+        data: notificationData,
+        timestamp: new Date(),
+      },
     );
   }
 
@@ -350,7 +354,7 @@ export class SlaMonitoringService {
     // 期間内の問い合わせを取得
     const inquiries = await this.inquiryRepository.find({
       where: {
-        applicationId,
+        appId: applicationId,
         createdAt: Between(startDate, endDate),
       },
       relations: ['responses'],
