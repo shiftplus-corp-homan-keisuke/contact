@@ -1,6 +1,7 @@
 # 実装計画
 
-- [x] 1. プロジェクト基盤とコアインターフェースの設定
+- [-] 1. プロジェクト基盤とコアインターフェースの設定
+
 
 
 
@@ -311,55 +312,135 @@
     - 自動クリーンアップ機能
     - バックアップ・アーカイブ機能
 
-- [ ] 12. フロントエンド実装
-  - [ ] 12.1 管理画面の基本レイアウト実装
+- [ ] 12. プロジェクト構造改善・リファクタリング
+
+  - [ ] 12.1 現状分析と移行準備
+    - 現在のディレクトリ構造の詳細分析
+    - ファイル依存関係マップの作成
+    - 移行対象ファイルの分類とリスト化
+    - NestJSベストプラクティス準拠の新構造設計
+    - _要件: 保守性向上、スケーラビリティ確保_
+
+  - [ ] 12.2 認証・ユーザー管理モジュールの分離
+    - 認証モジュール（auth）の独立化
+      - controllers/auth.controller.ts → modules/auth/controllers/
+      - services/auth.service.ts → modules/auth/services/
+      - strategies/jwt.strategy.ts → modules/auth/strategies/
+      - guards/jwt-auth.guard.ts → modules/auth/guards/
+    - ユーザー管理モジュール（users）の独立化
+      - entities/user.entity.ts → modules/users/entities/
+      - services/role.service.ts → modules/users/services/
+    - インポートパスの一括更新とテスト実行
+    - _要件: 認証機能の独立性確保_
+
+  - [ ] 12.3 問い合わせ・回答管理モジュールの分離
+    - 問い合わせモジュール（inquiries）の独立化
+      - controllers/inquiry.controller.ts → modules/inquiries/controllers/
+      - services/inquiry.service.ts → modules/inquiries/services/
+      - entities/inquiry.entity.ts → modules/inquiries/entities/
+    - 回答管理モジュール（responses）の独立化
+      - 回答関連のサービス・エンティティの分離
+    - 状態管理とワークフロー機能の統合
+    - _要件: コア機能の明確な分離_
+
+  - [ ] 12.4 検索・FAQ・通知モジュールの分離
+    - 検索モジュール（search）の独立化
+      - services/vector.service.ts → modules/search/services/
+      - services/hybrid-search.service.ts → modules/search/services/
+    - FAQモジュール（faqs）の独立化
+      - services/faq.service.ts → modules/faqs/services/
+      - services/faq-clustering.service.ts → modules/faqs/services/
+    - 通知モジュール（notifications）の独立化
+      - services/notification.service.ts → modules/notifications/services/
+      - gateways/notification.gateway.ts → modules/notifications/gateways/
+    - _要件: 機能別の独立性確保_
+
+  - [ ] 12.5 分析・テンプレート・ファイル管理モジュールの分離
+    - 分析モジュール（analytics）の独立化
+      - services/analytics.service.ts → modules/analytics/services/
+      - services/prediction.service.ts → modules/analytics/services/
+    - テンプレートモジュール（templates）の独立化
+      - services/template.service.ts → modules/templates/services/
+      - services/template-suggestion.service.ts → modules/templates/services/
+    - ファイル管理モジュール（files）の独立化
+      - services/file.service.ts → modules/files/services/
+      - services/file-storage.service.ts → modules/files/services/
+    - _要件: 補助機能の独立性確保_
+
+  - [ ] 12.6 共通機能の整理と最適化
+    - 真の共通機能の特定と分離
+      - guards/permissions.guard.ts（全モジュール共通）
+      - decorators/current-user.decorator.ts（全コントローラー共通）
+      - filters/global-exception.filter.ts（グローバル設定）
+      - interceptors/logging.interceptor.ts（グローバル設定）
+    - 機能固有ガードの適切なモジュールへの移行
+    - 共通ユーティリティ・定数・型定義の整理
+    - _要件: 共通機能の明確化_
+
+  - [ ] 12.7 モジュール統合とapp.module.ts更新
+    - 各機能モジュールのapp.module.tsへの統合
+    - モジュール間依存関係の最適化
+    - 循環依存の解消と依存関係の明確化
+    - 設定ファイルの整理（config/ディレクトリ）
+    - _要件: システム全体の統合性確保_
+
+  - [ ] 12.8 移行後テスト・検証・ドキュメント更新
+    - 全モジュールの単体テスト実行
+    - 統合テスト・E2Eテストの実行
+    - パフォーマンステストとベンチマーク比較
+    - 新しいプロジェクト構造のドキュメント作成
+    - 開発者向けガイドラインの更新
+    - _要件: 品質保証とドキュメント整備_
+
+- [ ] 13. フロントエンド実装
+  - [ ] 13.1 管理画面の基本レイアウト実装
     - React + Next.js基盤の構築
     - 認証機能付きレイアウトコンポーネント
     - ナビゲーションとルーティング設定
 
-  - [ ] 12.2 問い合わせ管理画面の実装
+  - [ ] 13.2 問い合わせ管理画面の実装
     - 問い合わせ一覧・詳細画面
     - 問い合わせ作成・編集フォーム
     - 検索・フィルタリング機能のUI
 
-  - [ ] 12.3 ダッシュボード画面の実装
+  - [ ] 13.3 ダッシュボード画面の実装
     - 統計情報の可視化コンポーネント
     - チャート・グラフ表示機能
     - リアルタイムデータ更新機能
 
-- [ ] 13. テスト実装
-  - [ ] 13.1 ユニットテストの実装
+- [ ] 14. テスト実装
+  - [ ] 14.1 ユニットテストの実装
     - 各サービスクラスのユニットテスト
     - バリデーション機能のテスト
     - エラーハンドリングのテスト
 
-  - [ ] 13.2 統合テストの実装
+  - [ ] 14.2 統合テストの実装
     - API エンドポイントの統合テスト
     - データベース連携テスト
     - 外部サービス連携テスト
 
-  - [ ] 13.3 E2Eテストの実装
+  - [ ] 14.3 E2Eテストの実装
     - 主要ユーザーフローのE2Eテスト
     - 問い合わせ登録から回答までのフローテスト
     - FAQ生成・公開フローのテスト
 
-- [ ] 14. デプロイメント・運用設定
-  - [ ] 14.1 Docker化とコンテナ設定
+- [ ] 15. デプロイメント・運用設定
+  - [ ] 15.1 Docker化とコンテナ設定
     - Dockerfileとdocker-compose.ymlの作成
     - 開発・本番環境の設定分離
     - 環境変数管理の実装
 
-  - [ ] 14.2 CI/CDパイプラインの構築
+  - [ ] 15.2 CI/CDパイプラインの構築
     - GitHub Actionsワークフローの設定
     - 自動テスト・ビルド・デプロイの実装
     - 品質ゲートとセキュリティチェック
 
-  - [ ] 14.3 監視・ログ設定
+  - [ ] 15.3 監視・ログ設定
     - アプリケーションログ設定
     - パフォーマンス監視の実装
     - エラー追跡とアラート設定
 
-- [ ] 15. システム統合とエンドツーエンドテスト
+- [ ] 16. システム統合とエンドツーエンドテスト
   - 全サービスの統合テスト実行
   - パフォーマンステストとボトルネック特定
   - セキュリティテストと脆弱性チェック
