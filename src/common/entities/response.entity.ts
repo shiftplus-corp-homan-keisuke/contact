@@ -1,13 +1,12 @@
 /**
  * 回答エンティティ
- * 要件: 2.1, 2.3, 2.4 (問い合わせ・回答管理機能)
+ * 要件: 2.1, 2.3, 2.4 (回答管理機能)
  */
 
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
+import { User } from '../../modules/users/entities/user.entity';
 import { Inquiry } from './inquiry.entity';
-import { User } from './user.entity';
 import { ResponseHistory } from './response-history.entity';
-import { TemplateUsage } from './template-usage.entity';
 
 @Entity('responses')
 export class Response {
@@ -44,6 +43,6 @@ export class Response {
   @OneToMany(() => ResponseHistory, history => history.response)
   history: ResponseHistory[];
 
-  @OneToMany(() => TemplateUsage, usage => usage.response)
-  templateUsages: TemplateUsage[];
+  // テンプレート使用履歴（オプション）
+  templateUsages?: any[];
 }

@@ -1,16 +1,29 @@
 /**
  * 問い合わせエンティティ
- * 要件: 1.1, 1.3, 1.4, 2.2, 2.3 (問い合わせ登録・管理機能)
+ * 要件: 1.1, 1.3, 1.4 (問い合わせ登録・管理機能)
  */
 
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
+import { User } from '../../modules/users/entities/user.entity';
 import { Application } from './application.entity';
-import { User } from './user.entity';
 import { Response } from './response.entity';
 import { InquiryStatusHistory } from './inquiry-status-history.entity';
-import { TemplateUsage } from './template-usage.entity';
 import { File } from './file.entity';
-import { InquiryStatus, InquiryPriority } from '../types/inquiry.types';
+
+export enum InquiryStatus {
+  NEW = 'new',
+  IN_PROGRESS = 'in_progress',
+  PENDING = 'pending',
+  RESOLVED = 'resolved',
+  CLOSED = 'closed',
+}
+
+export enum InquiryPriority {
+  LOW = 'low',
+  MEDIUM = 'medium',
+  HIGH = 'high',
+  URGENT = 'urgent',
+}
 
 @Entity('inquiries')
 export class Inquiry {
@@ -55,7 +68,7 @@ export class Inquiry {
   @JoinColumn({ name: 'app_id' })
   application: Application;
 
-  @ManyToOne(() => User, user => user.assignedInquiries, { nullable: true })
+  @ManyToOne(() => User, user => user.assignedInquiries)
   @JoinColumn({ name: 'assigned_to' })
   assignedUser: User;
 
@@ -65,9 +78,9 @@ export class Inquiry {
   @OneToMany(() => InquiryStatusHistory, history => history.inquiry)
   statusHistory: InquiryStatusHistory[];
 
-  @OneToMany(() => TemplateUsage, usage => usage.inquiry)
-  templateUsages: TemplateUsage[];
-
   @OneToMany(() => File, file => file.inquiry)
   files: File[];
+
+  // テンプレート使用履歴（オプション）
+  templateUsages?: any[];
 }

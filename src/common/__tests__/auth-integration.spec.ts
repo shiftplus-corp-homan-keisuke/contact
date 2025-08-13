@@ -9,14 +9,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import * as request from 'supertest';
 
-import { AuthModule } from '../modules/auth.module';
-import { User } from '../entities/user.entity';
-import { Role } from '../entities/role.entity';
-import { AuthAttempt } from '../entities/auth-attempt.entity';
-import { UserHistory } from '../entities/user-history.entity';
-import { AuthService } from '../services/auth.service';
-import { RoleService } from '../services/role.service';
-import { PermissionService } from '../services/permission.service';
+import { AuthModule } from '../../modules/auth/auth.module';
+import { User } from '../../modules/users/entities/user.entity';
+import { Role } from '../../modules/users/entities/role.entity';
+import { AuthAttempt } from '../../modules/auth/entities/auth-attempt.entity';
+import { UserHistory } from '../../modules/users/entities/user-history.entity';
+import { AuthService } from '../../modules/auth/services/auth.service';
+import { RoleService } from '../../modules/users/services/role.service';
+import { PermissionService } from '../../modules/users/services/permission.service';
 import { ResourceType, ActionType, RoleType } from '../types/role.types';
 
 describe('Auth Integration Tests', () => {

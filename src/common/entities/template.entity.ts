@@ -5,7 +5,7 @@
 
 import { Entity, Column, ManyToOne, JoinColumn, OneToMany, Index } from 'typeorm';
 import { BaseEntity } from './base.entity';
-import { User } from './user.entity';
+import { User } from '../../modules/users/entities/user.entity';
 import { Application } from './application.entity';
 import { TemplateUsage } from './template-usage.entity';
 import { TemplateVariable } from './template-variable.entity';

@@ -1,6 +1,7 @@
 # 実装計画
 
-- [-] 1. プロジェクト基盤とコアインターフェースの設定
+- [x] 1. プロジェクト基盤とコアインターフェースの設定
+
 
 
 
@@ -312,16 +313,22 @@
     - 自動クリーンアップ機能
     - バックアップ・アーカイブ機能
 
-- [ ] 12. プロジェクト構造改善・リファクタリング
+- [-] 12. プロジェクト構造改善・リファクタリング
 
-  - [ ] 12.1 現状分析と移行準備
+
+
+  - [x] 12.1 現状分析と移行準備
+
+
+
     - 現在のディレクトリ構造の詳細分析
     - ファイル依存関係マップの作成
     - 移行対象ファイルの分類とリスト化
     - NestJSベストプラクティス準拠の新構造設計
     - _要件: 保守性向上、スケーラビリティ確保_
 
-  - [ ] 12.2 認証・ユーザー管理モジュールの分離
+  - [x] 12.2 認証・ユーザー管理モジュールの分離
+
     - 認証モジュール（auth）の独立化
       - controllers/auth.controller.ts → modules/auth/controllers/
       - services/auth.service.ts → modules/auth/services/
@@ -333,7 +340,11 @@
     - インポートパスの一括更新とテスト実行
     - _要件: 認証機能の独立性確保_
 
-  - [ ] 12.3 問い合わせ・回答管理モジュールの分離
+  - [x] 12.3 問い合わせ・回答管理モジュールの分離
+
+
+
+
     - 問い合わせモジュール（inquiries）の独立化
       - controllers/inquiry.controller.ts → modules/inquiries/controllers/
       - services/inquiry.service.ts → modules/inquiries/services/
@@ -343,7 +354,11 @@
     - 状態管理とワークフロー機能の統合
     - _要件: コア機能の明確な分離_
 
-  - [ ] 12.4 検索・FAQ・通知モジュールの分離
+
+
+
+  - [x] 12.4 検索・FAQ・通知モジュールの分離
+
     - 検索モジュール（search）の独立化
       - services/vector.service.ts → modules/search/services/
       - services/hybrid-search.service.ts → modules/search/services/
@@ -355,7 +370,8 @@
       - gateways/notification.gateway.ts → modules/notifications/gateways/
     - _要件: 機能別の独立性確保_
 
-  - [ ] 12.5 分析・テンプレート・ファイル管理モジュールの分離
+  - [x] 12.5 分析・テンプレート・ファイル管理モジュールの分離
+
     - 分析モジュール（analytics）の独立化
       - services/analytics.service.ts → modules/analytics/services/
       - services/prediction.service.ts → modules/analytics/services/
@@ -367,7 +383,12 @@
       - services/file-storage.service.ts → modules/files/services/
     - _要件: 補助機能の独立性確保_
 
-  - [ ] 12.6 共通機能の整理と最適化
+  - [x] 12.6 共通機能の整理と最適化
+
+
+
+
+
     - 真の共通機能の特定と分離
       - guards/permissions.guard.ts（全モジュール共通）
       - decorators/current-user.decorator.ts（全コントローラー共通）
@@ -377,7 +398,12 @@
     - 共通ユーティリティ・定数・型定義の整理
     - _要件: 共通機能の明確化_
 
-  - [ ] 12.7 モジュール統合とapp.module.ts更新
+  - [x] 12.7 モジュール統合とapp.module.ts更新
+
+
+
+
+
     - 各機能モジュールのapp.module.tsへの統合
     - モジュール間依存関係の最適化
     - 循環依存の解消と依存関係の明確化
@@ -385,6 +411,26 @@
     - _要件: システム全体の統合性確保_
 
   - [ ] 12.8 移行後テスト・検証・ドキュメント更新
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     - 全モジュールの単体テスト実行
     - 統合テスト・E2Eテストの実行
     - パフォーマンステストとベンチマーク比較

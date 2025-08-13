@@ -10,7 +10,7 @@ import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { WorkflowService } from '../workflow.service';
 import { Inquiry } from '../../entities/inquiry.entity';
 import { InquiryStatusHistory } from '../../entities/inquiry-status-history.entity';
-import { User } from '../../entities/user.entity';
+import { User } from '../../../modules/users/entities/user.entity';
 import { InquiryStatus, InquiryPriority } from '../../types/inquiry.types';
 
 describe('WorkflowService', () => {
@@ -94,7 +94,7 @@ describe('WorkflowService', () => {
           },
         },
         {
-          provide: getRepositoryToken(User),
+          provide: 'UserRepository',
           useValue: {
             findOne: jest.fn(),
           },

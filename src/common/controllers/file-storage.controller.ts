@@ -11,10 +11,10 @@ import {
   ApiResponse,
   ApiBearerAuth
 } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from '../guards/permissions.guard';
 import { RequirePermission } from '../decorators/permissions.decorator';
-import { FileStorageService } from '../services/file-storage.service';
+import { FileStorageService } from '../../modules/files/services/file-storage.service';
 import {
   StorageUsageDto,
   FileCleanupResultDto,

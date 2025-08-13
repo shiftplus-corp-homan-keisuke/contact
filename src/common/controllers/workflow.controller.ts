@@ -34,7 +34,7 @@ import {
   StaleInquiryDto 
 } from '../dto/workflow.dto';
 import { BaseResponseDto } from '../dto/base-response.dto';
-import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
 import { RequirePermission } from '../decorators/permissions.decorator';
 import { PermissionsGuard } from '../guards/permissions.guard';
 import { CurrentUser } from '../decorators/current-user.decorator';

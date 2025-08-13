@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
-import { FileStorageService } from '../file-storage.service';
+import { FileStorageService } from '../../../modules/files/services/file-storage.service';
 import { FileRepository } from '../../repositories/file.repository';
-import { FileService } from '../file.service';
+import { FileService } from '../../../modules/files/services/file.service';
 import { File } from '../../entities/file.entity';
 
 describe('FileStorageService', () => {

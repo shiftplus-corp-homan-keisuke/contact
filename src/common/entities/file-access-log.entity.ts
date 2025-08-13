@@ -1,7 +1,7 @@
 import { Entity, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
 import { BaseEntity } from './base.entity';
 import { File } from './file.entity';
-import { User } from './user.entity';
+import { User } from '../../modules/users/entities/user.entity';
 
 /**
  * ファイルアクセスログエンティティ

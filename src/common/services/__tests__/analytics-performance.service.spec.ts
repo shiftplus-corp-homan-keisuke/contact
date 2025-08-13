@@ -6,11 +6,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { AnalyticsService } from '../analytics.service';
+import { AnalyticsService } from '../../../modules/analytics/services/analytics.service';
 import { Inquiry } from '../../entities/inquiry.entity';
 import { Response } from '../../entities/response.entity';
 import { Application } from '../../entities/application.entity';
-import { User } from '../../entities/user.entity';
+import { User } from '../../../modules/users/entities/user.entity';
 import { 
   UserPerformanceDto,
   TeamPerformanceDto,

@@ -6,8 +6,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { FAQClusteringService } from '../faq-clustering.service';
-import { VectorService } from '../vector.service';
+import { FAQClusteringService } from '../../../modules/faqs/services/faq-clustering.service';
+import { VectorService } from '../../../modules/search/services/vector.service';
 import { Inquiry } from '../../entities/inquiry.entity';
 import { Response } from '../../entities/response.entity';
 import { FAQGenerationOptions } from '../../types/faq.types';

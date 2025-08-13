@@ -15,8 +15,8 @@ import {
 } from '@nestjs/websockets';
 import { Logger, UseGuards } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
-import { JwtAuthGuard } from '../guards/jwt-auth.guard';
-import { AnalyticsService } from '../services/analytics.service';
+import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
+import { AnalyticsService } from '../../modules/analytics/services/analytics.service';
 import { AnalyticsFiltersDto, RealtimeStatsDto } from '../dto/analytics.dto';
 
 interface AuthenticatedSocket extends Socket {

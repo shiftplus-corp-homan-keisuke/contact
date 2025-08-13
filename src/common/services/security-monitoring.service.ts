@@ -6,7 +6,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, MoreThan } from 'typeorm';
-import { AuthAttempt } from '../entities/auth-attempt.entity';
+import { AuthAttempt } from '../../modules/auth/entities/auth-attempt.entity';
 
 export interface SecurityAlert {
   type: 'BRUTE_FORCE' | 'SUSPICIOUS_IP' | 'MULTIPLE_FAILURES' | 'ACCOUNT_LOCKOUT';

@@ -7,7 +7,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HistoryService } from '../services/history.service';
 import { HistoryTrackingInterceptor } from '../interceptors/history-tracking.interceptor';
-import { UserHistory } from '../entities/user-history.entity';
+import { UserHistory } from '../../modules/users/entities/user-history.entity';
 import { InquiryStatusHistory } from '../entities/inquiry-status-history.entity';
 import { ResponseHistory } from '../entities/response-history.entity';
 

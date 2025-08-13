@@ -4,22 +4,22 @@
  */
 
 // コアエンティティ
-import { User } from './user.entity';
-import { Role } from './role.entity';
+import { User } from '../../modules/users/entities/user.entity';
+import { Role } from '../../modules/users/entities/role.entity';
 import { Application } from './application.entity';
 import { Inquiry } from './inquiry.entity';
 import { Response } from './response.entity';
 import { FAQ } from './faq.entity';
 
 // 履歴エンティティ
-import { UserHistory } from './user-history.entity';
+import { UserHistory } from '../../modules/users/entities/user-history.entity';
 import { InquiryStatusHistory } from './inquiry-status-history.entity';
 import { ResponseHistory } from './response-history.entity';
 
 // 認証・API関連エンティティ
 import { ApiKey } from './api-key.entity';
 import { RateLimitTracking } from './rate-limit-tracking.entity';
-import { AuthAttempt } from './auth-attempt.entity';
+import { AuthAttempt } from '../../modules/auth/entities/auth-attempt.entity';
 
 // テンプレート関連エンティティ
 import { Template } from './template.entity';

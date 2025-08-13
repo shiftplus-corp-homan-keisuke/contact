@@ -7,8 +7,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ConflictException, NotFoundException } from '@nestjs/common';
-import { RoleService } from '../role.service';
-import { Role } from '../../entities/role.entity';
+import { RoleService } from '../../../modules/users/services/role.service';
+import { Role } from '../../../modules/users/entities/role.entity';
 import { CreateRoleRequest, UpdateRoleRequest, ResourceType, ActionType } from '../../types/role.types';
 
 describe('RoleService', () => {

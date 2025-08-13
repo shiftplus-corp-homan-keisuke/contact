@@ -1,35 +1,51 @@
 /**
- * 役割ベースアクセス制御ガード
- * 要件: 5.2, 5.3, 5.4 (権限管理機能)
+ * 役割チェックガード
+ * 要件: 5.1 (役割ベースの権限管理)
  */
 
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { ROLES_KEY } from '../decorators/roles.decorator';
+import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
+    // パブリックエンドポイントの場合はスキップ
+    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+
+    if (isPublic) {
+      return true;
+    }
+
+    // 必要な役割を取得
     const requiredRoles = this.reflector.getAllAndOverride<string[]>(ROLES_KEY, [
       context.getHandler(),
       context.getClass(),
     ]);
 
-    if (!requiredRoles) {
+    if (!requiredRoles || requiredRoles.length === 0) {
       return true;
     }
 
-    const { user } = context.switchToHttp().getRequest();
-    
+    const request = context.switchToHttp().getRequest();
+    const user = request.user;
+
     if (!user) {
-      return false;
+      throw new ForbiddenException('認証が必要です');
     }
 
-    // ユーザーの役割をチェック
-    const userRole = user.role?.name || user.role;
-    
-    return requiredRoles.some((role) => userRole === role);
+    const hasRole = requiredRoles.some((role) => user.role?.name === role);
+
+    if (!hasRole) {
+      throw new ForbiddenException('必要な役割を持っていません');
+    }
+
+    return true;
   }
 }

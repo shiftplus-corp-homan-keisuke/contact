@@ -7,7 +7,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { VectorService } from '../vector.service';
+import { VectorService } from '../../../modules/search/services/vector.service';
 import { Inquiry } from '../../entities/inquiry.entity';
 import { Response } from '../../entities/response.entity';
 import { InquiryStatus, InquiryPriority } from '../../types/inquiry.types';
@@ -256,7 +256,7 @@ describe('VectorService', () => {
       const inquiry = mockInquiry as Inquiry;
       
       const embedTextSpy = jest.spyOn(service, 'embedText').mockResolvedValue(new Array(1536).fill(0.1));
-      const storeVectorSpy = jest.spyOn(service, 'storeVector').mockResolvedValue();
+      const storeVectorSpy = jest.spyOn(service, 'storeVector').mockResolvedValue(undefined);
       
       await service.storeInquiryVector(inquiry);
       
@@ -283,7 +283,7 @@ describe('VectorService', () => {
       const inquiry = mockInquiry as Inquiry;
       
       const embedTextSpy = jest.spyOn(service, 'embedText').mockResolvedValue(new Array(1536).fill(0.1));
-      const storeVectorSpy = jest.spyOn(service, 'storeVector').mockResolvedValue();
+      const storeVectorSpy = jest.spyOn(service, 'storeVector').mockResolvedValue(undefined);
       
       await service.storeResponseVector(response, inquiry);
       

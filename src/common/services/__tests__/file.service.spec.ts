@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
 import { NotFoundException, BadRequestException } from '@nestjs/common';
-import { FileService } from '../file.service';
+import { FileService } from '../../../modules/files/services/file.service';
 import { FileRepository } from '../../repositories/file.repository';
 import { File } from '../../entities/file.entity';
 import { FileScanResult } from '../../types/file.types';
@@ -65,7 +65,15 @@ describe('FileService', () => {
     };
 
     const mockConfigService = {
-      get: jest.fn(),
+      get: jest.fn().mockImplementation((key: string, defaultValue?: any) => {
+        const config = {
+          'FILE_ALLOWED_MIME_TYPES': 'image/jpeg,image/png,image/gif,application/pdf,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          'FILE_ALLOWED_EXTENSIONS': '.jpg,.jpeg,.png,.gif,.pdf,.txt,.doc,.docx',
+          'FILE_MAX_SIZE': '10485760', // 10MB
+          'FILE_STORAGE_PATH': './uploads',
+        };
+        return config[key] || defaultValue;
+      }),
     };
 
     const module: TestingModule = await Test.createTestingModule({

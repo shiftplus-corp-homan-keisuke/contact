@@ -13,10 +13,10 @@ import {
   UsePipes
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
-import { AnalyticsService } from '../services/analytics.service';
+import { AnalyticsService } from '../../modules/analytics/services/analytics.service';
 import { 
   AnalyticsFiltersDto, 
   InquiryStatisticsDto, 

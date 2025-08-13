@@ -7,10 +7,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import { InquiryService } from '../inquiry.service';
+import { InquiryService } from '../../../modules/inquiries/services/inquiry.service';
 import { Inquiry } from '../../entities/inquiry.entity';
 import { Application } from '../../entities/application.entity';
-import { User } from '../../entities/user.entity';
+import { User } from '../../../modules/users/entities/user.entity';
 import { CreateInquiryDto, UpdateInquiryDto } from '../../dto/inquiry.dto';
 import { InquiryStatus, InquiryPriority } from '../../types/inquiry.types';
 

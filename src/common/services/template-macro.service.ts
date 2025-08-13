@@ -9,7 +9,7 @@ import { Repository } from 'typeorm';
 import { Template } from '../entities/template.entity';
 import { TemplateVariable } from '../entities/template-variable.entity';
 import { TemplateUsage } from '../entities/template-usage.entity';
-import { User } from '../entities/user.entity';
+import { User } from '../../modules/users/entities/user.entity';
 import { Inquiry } from '../entities/inquiry.entity';
 import { Response } from '../entities/response.entity';
 import {

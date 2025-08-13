@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { NotificationGateway } from '../gateways/notification.gateway';
+import { NotificationGateway } from '../../modules/notifications/gateways/notification.gateway';
 import { SlackNotificationService } from './slack-notification.service';
 import { TeamsNotificationService } from './teams-notification.service';
 import { NotificationRuleEngineService } from './notification-rule-engine.service';

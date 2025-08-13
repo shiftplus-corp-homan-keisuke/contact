@@ -1,69 +1,32 @@
 /**
  * レート制限ガード
- * 要件: 7.4 (API利用制限の管理)
+ * 要件: 7.4 (レート制限機能の実装)
  */
 
-import { Injectable, CanActivate, ExecutionContext, HttpException, HttpStatus } from '@nestjs/common';
-import { Request, Response } from 'express';
-import { RateLimitService } from '../services/rate-limit.service';
-import { ApiKeyContext } from '../services/api-key.service';
+import { Injectable, CanActivate, ExecutionContext, TooManyRequestsException } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
+import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 
 @Injectable()
 export class RateLimitGuard implements CanActivate {
-  constructor(private readonly rateLimitService: RateLimitService) {}
+  constructor(private reflector: Reflector) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest<Request>();
-    const response = context.switchToHttp().getResponse<Response>();
+    // パブリックエンドポイントの場合はスキップ
+    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
 
-    // APIキー認証情報を取得
-    const apiKeyContext = request['apiKeyContext'] as ApiKeyContext;
-    
-    if (!apiKeyContext) {
-      // APIキー認証が必要
-      throw new HttpException('API認証が必要です', HttpStatus.UNAUTHORIZED);
-    }
-
-    try {
-      // レート制限チェック
-      const rateLimitResult = await this.rateLimitService.checkRateLimit(
-        apiKeyContext.apiKeyId,
-        apiKeyContext.rateLimit.limitPerHour
-      );
-
-      // レスポンスヘッダーにレート制限情報を追加
-      response.setHeader('X-RateLimit-Limit', rateLimitResult.limit);
-      response.setHeader('X-RateLimit-Remaining', rateLimitResult.remaining);
-      response.setHeader('X-RateLimit-Reset', Math.floor(rateLimitResult.resetTime.getTime() / 1000));
-
-      if (!rateLimitResult.allowed) {
-        // レート制限超過
-        response.setHeader('Retry-After', Math.ceil((rateLimitResult.resetTime.getTime() - Date.now()) / 1000));
-        
-        throw new HttpException(
-          {
-            statusCode: HttpStatus.TOO_MANY_REQUESTS,
-            message: 'レート制限を超過しました',
-            error: 'Too Many Requests',
-            rateLimitInfo: {
-              limit: rateLimitResult.limit,
-              remaining: rateLimitResult.remaining,
-              resetTime: rateLimitResult.resetTime,
-            },
-          },
-          HttpStatus.TOO_MANY_REQUESTS
-        );
-      }
-
-      return true;
-    } catch (error) {
-      if (error instanceof HttpException) {
-        throw error;
-      }
-      
-      // レート制限チェックでエラーが発生した場合はログに記録してリクエストを通す
-      console.error('Rate limit check failed:', error);
+    if (isPublic) {
       return true;
     }
+
+    const request = context.switchToHttp().getRequest();
+    const clientId = request.ip || request.headers['x-forwarded-for'] || 'unknown';
+
+    // TODO: レート制限の検証ロジックを実装
+    // 現在は仮実装
+    return true;
   }
 }

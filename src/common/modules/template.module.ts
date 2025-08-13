@@ -8,13 +8,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Template } from '../entities/template.entity';
 import { TemplateVariable } from '../entities/template-variable.entity';
 import { TemplateUsage } from '../entities/template-usage.entity';
-import { User } from '../entities/user.entity';
+import { User } from '../../modules/users/entities/user.entity';
 import { Application } from '../entities/application.entity';
 import { TemplateController } from '../controllers/template.controller';
-import { TemplateService } from '../services/template.service';
+import { TemplateService } from '../../modules/templates/services/template.service';
 import { TemplateRepository } from '../repositories/template.repository';
 import { HybridSearchService } from '../services/hybrid-search.service';
-import { TemplateSuggestionService } from '../services/template-suggestion.service';
+import { TemplateSuggestionService } from '../../modules/templates/services/template-suggestion.service';
 import { TemplateMacroService } from '../services/template-macro.service';
 
 @Module({

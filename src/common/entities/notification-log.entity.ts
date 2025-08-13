@@ -6,7 +6,7 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { User } from './user.entity';
+import { User } from '../../modules/users/entities/user.entity';
 import { Inquiry } from './inquiry.entity';
 import { NotificationRule } from './notification-rule.entity';
 

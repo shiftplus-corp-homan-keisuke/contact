@@ -5,13 +5,13 @@
 
 import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AnalyticsService } from '../services/analytics.service';
+import { AnalyticsService } from '../../modules/analytics/services/analytics.service';
 import { AnalyticsController } from '../controllers/analytics.controller';
 import { AnalyticsGateway } from '../gateways/analytics.gateway';
 import { Inquiry } from '../entities/inquiry.entity';
 import { Response } from '../entities/response.entity';
 import { Application } from '../entities/application.entity';
-import { User } from '../entities/user.entity';
+import { User } from '../../modules/users/entities/user.entity';
 import { InquiryStatusHistory } from '../entities/inquiry-status-history.entity';
 
 @Module({

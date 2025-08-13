@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { AuthModule } from './modules/auth.module';
+
 import { ApiKeyModule } from './modules/api-key.module';
 import { InquiryModule } from './modules/inquiry.module';
 import { ResponseModule } from './modules/response.module';
@@ -8,14 +8,12 @@ import { FAQModule } from './modules/faq.module';
 import { FAQSiteModule } from './modules/faq-site.module';
 import { NotificationModule } from './modules/notification.module';
 import { SlaModule } from './modules/sla.module';
-import { AnalyticsModule } from './modules/analytics.module';
-import { PredictionModule } from './modules/prediction.module';
-import { TemplateModule } from './modules/template.module';
-import { FileModule } from './modules/file.module';
+
+import { UsersModule } from '../modules/users/users.module';
 
 @Module({
   imports: [
-    AuthModule,
+    UsersModule,
     ApiKeyModule,
     InquiryModule,
     ResponseModule,
@@ -24,14 +22,10 @@ import { FileModule } from './modules/file.module';
     FAQSiteModule,
     NotificationModule,
     SlaModule,
-    AnalyticsModule,
-    PredictionModule,
-    TemplateModule,
-    FileModule,
   ],
   providers: [],
   exports: [
-    AuthModule,
+    UsersModule,
     ApiKeyModule,
     InquiryModule,
     ResponseModule,
@@ -40,10 +34,6 @@ import { FileModule } from './modules/file.module';
     FAQSiteModule,
     NotificationModule,
     SlaModule,
-    AnalyticsModule,
-    PredictionModule,
-    TemplateModule,
-    FileModule,
   ],
 })
 export class CommonModule {}

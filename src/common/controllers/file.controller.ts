@@ -26,11 +26,11 @@ import {
   ApiParam,
   ApiQuery
 } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from '../guards/permissions.guard';
 import { RequirePermission } from '../decorators/permissions.decorator';
 import { CurrentUser } from '../decorators/current-user.decorator';
-import { FileService } from '../services/file.service';
+import { FileService } from '../../modules/files/services/file.service';
 import {
   FileUploadDto,
   FileResponseDto,
@@ -40,7 +40,7 @@ import {
   FileValidationResultDto
 } from '../dto/file.dto';
 import { BaseResponseDto } from '../dto/base-response.dto';
-import { User } from '../entities/user.entity';
+import { User } from '../../modules/users/entities/user.entity';
 
 /**
  * ファイル管理コントローラー

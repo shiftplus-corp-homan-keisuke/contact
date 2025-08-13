@@ -11,7 +11,7 @@ import {
   Request,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
 // import { RolesGuard } from '../guards/roles.guard';
 // import { Roles } from '../decorators/roles.decorator';
 import { RealtimeNotificationService } from '../services/realtime-notification.service';

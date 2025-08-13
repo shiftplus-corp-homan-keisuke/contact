@@ -5,7 +5,7 @@
 
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { Inquiry } from './inquiry.entity';
-import { User } from './user.entity';
+import { User } from '../../modules/users/entities/user.entity';
 import { InquiryStatus } from '../types/inquiry.types';
 
 @Entity('inquiry_status_history')

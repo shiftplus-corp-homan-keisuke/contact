@@ -7,7 +7,7 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { User } from './user.entity';
+import { User } from '../../modules/users/entities/user.entity';
 
 /**
  * 通知ルールエンティティ

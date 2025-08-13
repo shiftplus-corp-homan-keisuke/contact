@@ -9,11 +9,11 @@ import { JwtService } from '@nestjs/jwt';
 import { Repository } from 'typeorm';
 import { ConflictException, UnauthorizedException, NotFoundException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { AuthService } from '../services/auth.service';
-import { User } from '../entities/user.entity';
-import { Role } from '../entities/role.entity';
-import { AuthAttempt } from '../entities/auth-attempt.entity';
-import { UserHistory } from '../entities/user-history.entity';
+import { AuthService } from '../../modules/auth/services/auth.service';
+import { User } from '../../modules/users/entities/user.entity';
+import { Role } from '../../modules/users/entities/role.entity';
+import { AuthAttempt } from '../../modules/auth/entities/auth-attempt.entity';
+import { UserHistory } from '../../modules/users/entities/user-history.entity';
 import { RoleType, ResourceType, ActionType } from '../types/role.types';
 
 // bcryptのモック

@@ -1,19 +1,13 @@
 /**
- * バリデーション関数の統合エクスポート
+ * 共通バリデーション関数の統合エクスポート
  * 要件: 2.1, 3.3, 1.2 (TypeScriptインターフェースとバリデーション関数の実装)
+ * 
+ * 注意: 機能固有のバリデーションは各モジュールに移行済み
+ * - ユーザー関連: src/modules/users/validators/
+ * - 問い合わせ関連: src/modules/inquiries/validators/
+ * - 回答関連: src/modules/responses/validators/
+ * - FAQ関連: src/modules/faqs/validators/
  */
-
-// ユーザー関連のバリデーション
-export * from './user.validators';
-
-// 問い合わせ関連のバリデーション
-export * from './inquiry.validators';
-
-// 回答関連のバリデーション
-export * from './response.validators';
-
-// FAQ関連のバリデーション
-export * from './faq.validators';
 
 // 共通バリデーション関数
 export function validateUUID(uuid: string): { isValid: boolean; errors: string[] } {

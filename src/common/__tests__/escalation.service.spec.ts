@@ -5,7 +5,7 @@ import { NotFoundException } from '@nestjs/common';
 import { EscalationService } from '../services/escalation.service';
 import { SlaViolation } from '../entities/sla-violation.entity';
 import { Inquiry } from '../entities/inquiry.entity';
-import { User } from '../entities/user.entity';
+import { User } from '../../modules/users/entities/user.entity';
 import { RealtimeNotificationService } from '../services/realtime-notification.service';
 import { SlackNotificationService } from '../services/slack-notification.service';
 import { TeamsNotificationService } from '../services/teams-notification.service';

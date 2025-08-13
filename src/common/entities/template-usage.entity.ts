@@ -6,7 +6,7 @@
 import { Entity, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
 import { BaseEntity } from './base.entity';
 import { Template } from './template.entity';
-import { User } from './user.entity';
+import { User } from '../../modules/users/entities/user.entity';
 import { Inquiry } from './inquiry.entity';
 import { Response } from './response.entity';
 

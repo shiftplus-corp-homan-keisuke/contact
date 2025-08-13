@@ -5,7 +5,7 @@
 
 import { Test, TestingModule } from '@nestjs/testing';
 import { AnalyticsController } from '../analytics.controller';
-import { AnalyticsService } from '../../services/analytics.service';
+import { AnalyticsService } from '../../../modules/analytics/services/analytics.service';
 import { 
   UserPerformanceDto,
   TeamPerformanceDto,

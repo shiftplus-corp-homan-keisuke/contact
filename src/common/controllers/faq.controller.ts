@@ -29,7 +29,7 @@ import {
   ApiBody,
 } from '@nestjs/swagger';
 import { FAQService } from '../services/faq.service';
-import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from '../guards/permissions.guard';
 import { RequirePermission } from '../decorators/permissions.decorator';
 import {

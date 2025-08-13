@@ -4,9 +4,9 @@
  */
 
 import { Test, TestingModule } from '@nestjs/testing';
-import { HybridSearchService } from '../hybrid-search.service';
+import { HybridSearchService } from '../../../modules/search/services/hybrid-search.service';
 import { SearchService } from '../search.service';
-import { VectorService } from '../vector.service';
+import { VectorService } from '../../../modules/search/services/vector.service';
 import { SearchInquiriesDto } from '../../dto/search.dto';
 import { InquiryStatus, InquiryPriority } from '../../types/inquiry.types';
 import { Inquiry } from '../../entities/inquiry.entity';

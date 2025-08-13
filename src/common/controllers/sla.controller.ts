@@ -13,7 +13,7 @@ import {
   HttpCode,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
 import { SlaMonitoringService } from '../services/sla-monitoring.service';
 import { EscalationService } from '../services/escalation.service';
 import { InjectRepository } from '@nestjs/typeorm';

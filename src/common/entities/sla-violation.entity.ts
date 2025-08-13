@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { Inquiry } from './inquiry.entity';
 import { SlaConfig } from './sla-config.entity';
-import { User } from './user.entity';
+import { User } from '../../modules/users/entities/user.entity';
 
 /**
  * SLA違反ログエンティティ

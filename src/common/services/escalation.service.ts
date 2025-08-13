@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Between } from 'typeorm';
 import { SlaViolation } from '../entities/sla-violation.entity';
 import { Inquiry } from '../entities/inquiry.entity';
-import { User } from '../entities/user.entity';
+import { User } from '../../modules/users/entities/user.entity';
 import { RealtimeNotificationService } from './realtime-notification.service';
 import { SlackNotificationService } from './slack-notification.service';
 import { TeamsNotificationService } from './teams-notification.service';

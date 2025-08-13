@@ -6,7 +6,7 @@ import { NotificationLog } from '../entities/notification-log.entity';
 import { UserNotificationSettings } from '../entities/user-notification-settings.entity';
 import { NotificationRequestDto, NotificationTrigger, NotificationType } from '../dto/notification.dto';
 import { Inquiry } from '../entities/inquiry.entity';
-import { User } from '../entities/user.entity';
+import { User } from '../../modules/users/entities/user.entity';
 
 /**
  * 通知ルールエンジンサービス

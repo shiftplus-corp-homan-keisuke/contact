@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { NotificationGateway } from '../notification.gateway';
+import { NotificationGateway } from '../../../modules/notifications/gateways/notification.gateway';
 import { WebSocketNotificationDto } from '../../dto/notification.dto';
 
 describe('NotificationGateway', () => {

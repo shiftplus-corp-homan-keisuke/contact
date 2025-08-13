@@ -45,7 +45,8 @@ export enum ResourceType {
   APPLICATION = 'application',
   ANALYTICS = 'analytics',
   TEMPLATE = 'template',
-  FILE = 'file'
+  FILE = 'file',
+  SYSTEM = 'system'
 }
 
 // 事前定義されたアクション
@@ -62,6 +63,7 @@ export enum ActionType {
 // 事前定義された役割
 export enum RoleType {
   ADMIN = 'admin',
+  SYSTEM_ADMIN = 'system_admin',
   SUPPORT_STAFF = 'support_staff',
   VIEWER = 'viewer',
   API_USER = 'api_user'

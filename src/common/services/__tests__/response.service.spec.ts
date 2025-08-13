@@ -7,11 +7,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import { ResponseService } from '../response.service';
+import { ResponseService } from '../../../modules/responses/services/response.service';
 import { Response } from '../../entities/response.entity';
 import { ResponseHistory } from '../../entities/response-history.entity';
 import { Inquiry } from '../../entities/inquiry.entity';
-import { User } from '../../entities/user.entity';
+import { User } from '../../../modules/users/entities/user.entity';
 import { CreateResponseDto, UpdateResponseDto } from '../../dto/response.dto';
 import { InquiryStatus, InquiryPriority } from '../../types/inquiry.types';
 
@@ -136,7 +136,7 @@ describe('ResponseService', () => {
     expect(service).toBeDefined();
   });
 
-  describe('addResponse', () => {
+  describe('createResponse', () => {
     const createResponseDto: CreateResponseDto = {
       inquiryId: 'test-inquiry-id',
       content: 'テスト回答',
@@ -151,7 +151,7 @@ describe('ResponseService', () => {
       responseRepository.save.mockResolvedValue(mockResponse);
 
       // Act
-      const result = await service.addResponse(createResponseDto, 'test-user-id');
+      const result = await service.createResponse(createResponseDto, 'test-user-id');
 
       // Assert
       expect(result).toEqual(mockResponse);
@@ -175,7 +175,7 @@ describe('ResponseService', () => {
       inquiryRepository.findOne.mockResolvedValue(null);
 
       // Act & Assert
-      await expect(service.addResponse(createResponseDto, 'test-user-id'))
+      await expect(service.createResponse(createResponseDto, 'test-user-id'))
         .rejects.toThrow(BadRequestException);
     });
 
@@ -185,7 +185,7 @@ describe('ResponseService', () => {
       userRepository.findOne.mockResolvedValue(null);
 
       // Act & Assert
-      await expect(service.addResponse(createResponseDto, 'test-user-id'))
+      await expect(service.createResponse(createResponseDto, 'test-user-id'))
         .rejects.toThrow(BadRequestException);
     });
   });
@@ -253,7 +253,7 @@ describe('ResponseService', () => {
       responseRepository.findOne.mockResolvedValue(mockResponse);
 
       // Act
-      const result = await service.getResponse('test-response-id');
+      const result = await service.getResponse('test-response-id', 'test-user-id');
 
       // Assert
       expect(result).toEqual(mockResponse);
@@ -268,7 +268,7 @@ describe('ResponseService', () => {
       responseRepository.findOne.mockResolvedValue(null);
 
       // Act & Assert
-      await expect(service.getResponse('non-existent-id')).rejects.toThrow(NotFoundException);
+      await expect(service.getResponse('non-existent-id', 'test-user-id')).rejects.toThrow(NotFoundException);
     });
   });
 
@@ -336,7 +336,7 @@ describe('ResponseService', () => {
     });
   });
 
-  describe('getPublicResponsesByInquiry', () => {
+  describe('getResponsesByInquiry (public only)', () => {
     it('正常に公開回答一覧を取得できること', async () => {
       // Arrange
       const publicResponse = { ...mockResponse, isPublic: true };
@@ -344,7 +344,7 @@ describe('ResponseService', () => {
       responseRepository.find.mockResolvedValue(mockPublicResponses);
 
       // Act
-      const result = await service.getPublicResponsesByInquiry('test-inquiry-id');
+      const result = await service.getResponsesByInquiry('test-inquiry-id', 'test-user-id', false);
 
       // Assert
       expect(result).toEqual(mockPublicResponses);

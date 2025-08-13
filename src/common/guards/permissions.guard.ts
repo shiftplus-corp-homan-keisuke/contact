@@ -5,7 +5,7 @@
 
 import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { PermissionService } from '../services/permission.service';
+import { PermissionService } from '../../modules/users/services/permission.service';
 import { PERMISSIONS_KEY, RequiredPermission } from '../decorators/permissions.decorator';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 
@@ -46,12 +46,8 @@ export class PermissionsGuard implements CanActivate {
 
     // 各権限をチェック
     for (const permission of requiredPermissions) {
-      const hasPermission = this.permissionService.checkPermissionWithContext(
-        {
-          userId: user.userId,
-          roleId: user.roleId,
-          permissions: user.permissions,
-        },
+      const hasPermission = await this.permissionService.checkPermission(
+        user.userId,
         permission.resource,
         permission.action,
       );

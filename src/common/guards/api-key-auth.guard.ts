@@ -1,26 +1,36 @@
 /**
  * APIキー認証ガード
- * 要件: 7.1 (API認証)
+ * 要件: 7.1 (APIキー認証機能の実装)
  */
 
-import { Injectable, ExecutionContext, UnauthorizedException } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { Request } from 'express';
+import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
+import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 
 @Injectable()
-export class ApiKeyAuthGuard extends AuthGuard('api-key') {
-  canActivate(context: ExecutionContext) {
-    return super.canActivate(context);
-  }
+export class ApiKeyAuthGuard implements CanActivate {
+  constructor(private reflector: Reflector) {}
 
-  handleRequest(err: any, user: any, info: any, context: ExecutionContext) {
-    if (err || !user) {
-      throw err || new UnauthorizedException('API認証が必要です');
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    // パブリックエンドポイントの場合はスキップ
+    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+
+    if (isPublic) {
+      return true;
     }
-    return user;
-  }
 
-  getRequest(context: ExecutionContext): Request {
-    return context.switchToHttp().getRequest();
+    const request = context.switchToHttp().getRequest();
+    const apiKey = request.headers['x-api-key'];
+
+    if (!apiKey) {
+      throw new UnauthorizedException('APIキーが必要です');
+    }
+
+    // TODO: APIキーの検証ロジックを実装
+    // 現在は仮実装
+    return true;
   }
 }

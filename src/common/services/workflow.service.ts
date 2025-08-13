@@ -8,7 +8,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Inquiry } from '../entities/inquiry.entity';
 import { InquiryStatusHistory } from '../entities/inquiry-status-history.entity';
-import { User } from '../entities/user.entity';
+import { User } from '../../modules/users/entities/user.entity';
+import { UserRepository } from '../../modules/users/repositories/user.repository';
 import { InquiryStatus } from '../types/inquiry.types';
 
 @Injectable()
@@ -29,8 +30,7 @@ export class WorkflowService {
     private readonly inquiryRepository: Repository<Inquiry>,
     @InjectRepository(InquiryStatusHistory)
     private readonly statusHistoryRepository: Repository<InquiryStatusHistory>,
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    private readonly userRepository: UserRepository,
   ) {}
 
   /**
@@ -56,9 +56,7 @@ export class WorkflowService {
     }
 
     // ユーザーの存在確認
-    const user = await this.userRepository.findOne({
-      where: { id: userId }
-    });
+    const user = await this.userRepository.findById(userId);
 
     if (!user) {
       throw new BadRequestException('指定されたユーザーが見つかりません');

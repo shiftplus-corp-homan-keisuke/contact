@@ -14,7 +14,7 @@ import { HybridSearchService } from '../services/hybrid-search.service';
 import { AnalyticsModule } from './analytics.module';
 import { Inquiry } from '../entities/inquiry.entity';
 import { Application } from '../entities/application.entity';
-import { User } from '../entities/user.entity';
+import { User } from '../../modules/users/entities/user.entity';
 import { Response } from '../entities/response.entity';
 
 @Module({

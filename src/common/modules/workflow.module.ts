@@ -9,7 +9,7 @@ import { WorkflowController } from '../controllers/workflow.controller';
 import { WorkflowService } from '../services/workflow.service';
 import { Inquiry } from '../entities/inquiry.entity';
 import { InquiryStatusHistory } from '../entities/inquiry-status-history.entity';
-import { User } from '../entities/user.entity';
+import { User } from '../../modules/users/entities/user.entity';
 
 @Module({
   imports: [

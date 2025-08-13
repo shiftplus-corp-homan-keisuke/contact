@@ -6,10 +6,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { PredictionService, PredictionRequestDto } from '../prediction.service';
+import { PredictionService, PredictionRequestDto } from '../../../modules/analytics/services/prediction.service';
 import { Inquiry } from '../../entities/inquiry.entity';
 import { Response } from '../../entities/response.entity';
-import { User } from '../../entities/user.entity';
+import { User } from '../../../modules/users/entities/user.entity';
 import { InquiryStatus, InquiryPriority } from '../../types/inquiry.types';
 
 describe('PredictionService', () => {

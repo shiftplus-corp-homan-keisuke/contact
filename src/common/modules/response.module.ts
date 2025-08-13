@@ -10,7 +10,7 @@ import { ResponseService } from '../services/response.service';
 import { Response } from '../entities/response.entity';
 import { ResponseHistory } from '../entities/response-history.entity';
 import { Inquiry } from '../entities/inquiry.entity';
-import { User } from '../entities/user.entity';
+import { User } from '../../modules/users/entities/user.entity';
 
 @Module({
   imports: [

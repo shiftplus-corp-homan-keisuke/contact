@@ -6,7 +6,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BadRequestException } from '@nestjs/common';
 import { PredictionController, CreatePredictionRequestDto } from '../prediction.controller';
-import { PredictionService, PredictionAnalysisDto } from '../../services/prediction.service';
+import { PredictionService, PredictionAnalysisDto } from '../../../modules/analytics/services/prediction.service';
 
 describe('PredictionController', () => {
   let controller: PredictionController;

@@ -5,11 +5,11 @@
 
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PredictionService } from '../services/prediction.service';
+import { PredictionService } from '../../modules/analytics/services/prediction.service';
 import { PredictionController } from '../controllers/prediction.controller';
 import { Inquiry } from '../entities/inquiry.entity';
 import { Response } from '../entities/response.entity';
-import { User } from '../entities/user.entity';
+import { User } from '../../modules/users/entities/user.entity';
 import { Application } from '../entities/application.entity';
 
 @Module({

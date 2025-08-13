@@ -3,7 +3,7 @@
  * 要件: 4.1, 4.2 (ユーザー管理機能のテスト)
  */
 
-import { validateEmail, validatePassword, validateUserName } from '../user.validators';
+import { validateEmail, validatePassword, validateUserName } from '../../../modules/users/validators/user.validators';
 
 describe('User Validators', () => {
   describe('validateEmail', () => {

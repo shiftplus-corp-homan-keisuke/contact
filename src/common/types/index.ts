@@ -1,24 +1,13 @@
 /**
- * 型定義の統合エクスポート
+ * 共通型定義の統合エクスポート
  * 要件: 2.1, 3.3, 1.2 (コアデータモデルインターフェースと型定義)
+ * 
+ * 注意: 機能固有の型定義は各モジュールに移行済み
+ * - ユーザー関連: src/modules/users/types/
+ * - 問い合わせ関連: src/modules/inquiries/types/
+ * - FAQ関連: src/modules/faqs/types/
+ * - ファイル関連: src/modules/files/types/
  */
-
-// ユーザー関連の型
-export * from './user.types';
-export * from './role.types';
-
-// アプリケーション関連の型
-export * from './application.types';
-
-// 問い合わせ関連の型
-export * from './inquiry.types';
-export * from './response.types';
-
-// FAQ関連の型
-export * from './faq.types';
-
-// ファイル関連の型
-export * from './file.types';
 
 // 共通型定義
 export interface BaseEntity {

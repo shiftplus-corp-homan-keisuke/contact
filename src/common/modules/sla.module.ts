@@ -4,7 +4,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { SlaConfig } from '../entities/sla-config.entity';
 import { SlaViolation } from '../entities/sla-violation.entity';
 import { Inquiry } from '../entities/inquiry.entity';
-import { User } from '../entities/user.entity';
+import { User } from '../../modules/users/entities/user.entity';
 import { SlaController } from '../controllers/sla.controller';
 import { SlaMonitoringService } from '../services/sla-monitoring.service';
 import { EscalationService } from '../services/escalation.service';

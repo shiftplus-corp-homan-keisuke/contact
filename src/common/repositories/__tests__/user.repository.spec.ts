@@ -6,9 +6,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserRepository } from '../user.repository';
-import { User } from '../../entities/user.entity';
-import { UserHistory } from '../../entities/user-history.entity';
+import { UserRepository } from '../../../modules/users/repositories/user.repository';
+import { User } from '../../../modules/users/entities/user.entity';
+import { UserHistory } from '../../../modules/users/entities/user-history.entity';
 
 describe('UserRepository', () => {
   let userRepository: UserRepository;

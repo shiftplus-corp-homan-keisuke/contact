@@ -7,7 +7,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 import { HistoryService } from '../history.service';
-import { UserHistory } from '../../entities/user-history.entity';
+import { UserHistory } from '../../../modules/users/entities/user-history.entity';
 import { InquiryStatusHistory } from '../../entities/inquiry-status-history.entity';
 import { ResponseHistory } from '../../entities/response-history.entity';
 

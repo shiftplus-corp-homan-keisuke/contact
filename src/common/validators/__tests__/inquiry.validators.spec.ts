@@ -8,7 +8,7 @@ import {
   validateInquiryContent, 
   validateInquiryPriority,
   validateSearchQuery 
-} from '../inquiry.validators';
+} from '../../../modules/inquiries/validators/inquiry.validators';
 import { InquiryPriority } from '../../types/inquiry.types';
 
 describe('Inquiry Validators', () => {

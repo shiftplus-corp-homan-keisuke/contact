@@ -14,10 +14,10 @@ import {
   BadRequestException
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../../modules/auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
-import { PredictionService, PredictionRequestDto, PredictionAnalysisDto } from '../services/prediction.service';
+import { PredictionService, PredictionRequestDto, PredictionAnalysisDto } from '../../modules/analytics/services/prediction.service';
 import { AnalyticsFiltersDto, DateRangeDto } from '../dto/analytics.dto';
 import { BaseResponseDto } from '../dto/base-response.dto';
 
