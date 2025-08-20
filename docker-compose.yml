@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  # PostgreSQL データベース
+  postgres:
+    image: postgres:15-alpine
+    container_name: inquiry_postgres
+    environment:
+      POSTGRES_DB: inquiry_management
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init:/docker-entrypoint-initdb.d
+    networks:
+      - inquiry_network
+
+  # Redis キャッシュ
+  redis:
+    image: redis:7-alpine
+    container_name: inquiry_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - inquiry_network
+
+  # アプリケーション（開発用）
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: inquiry_app
+    environment:
+      - NODE_ENV=development
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=password
+      - DATABASE_NAME=inquiry_management
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    ports:
+      - "3002:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - inquiry_network
+    command: npm run start:dev
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  inquiry_network:
+    driver: bridge

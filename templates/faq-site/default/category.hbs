@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{currentCategory}} - {{siteTitle}}</title>
+    <meta name="description" content="{{currentCategory}}に関するよくある質問">
+    <link rel="stylesheet" href="assets/css/style.css">
+    {{#if customCss}}
+    <style>
+        {{{customCss}}}
+    </style>
+    {{/if}}
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            {{#if logoUrl}}
+            <img src="{{logoUrl}}" alt="{{application.name}}" class="logo">
+            {{/if}}
+            <h1 class="site-title">{{siteTitle}}</h1>
+            <nav class="breadcrumb">
+                <a href="index.html">ホーム</a> > {{currentCategory}}
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="category-header">
+                <h2>{{currentCategory}}</h2>
+                <p>{{currentCategory}}に関するよくある質問（{{categoryFAQs.length}}件）</p>
+            </div>
+
+            <div class="category-navigation">
+                <h3>他のカテゴリ</h3>
+                <div class="category-links">
+                    <a href="index.html" class="category-link">すべて</a>
+                    {{#each categories}}
+                    {{#unless (eq this ../currentCategory)}}
+                    <a href="category-{{sanitizeFileName this}}.html" class="category-link">{{this}}</a>
+                    {{/unless}}
+                    {{/each}}
+                </div>
+            </div>
+
+            <div class="faq-section">
+                <div class="faq-list">
+                    {{#each categoryFAQs}}
+                    <div class="faq-item">
+                        <div class="faq-question" data-faq-id="{{id}}">
+                            <h4>{{question}}</h4>
+                            <span class="toggle-icon">+</span>
+                        </div>
+                        <div class="faq-answer" id="answer-{{id}}">
+                            <div class="answer-content">
+                                {{{answer}}}
+                            </div>
+                            {{#if tags}}
+                            <div class="faq-tags">
+                                {{#each tags}}
+                                <span class="tag">{{this}}</span>
+                                {{/each}}
+                            </div>
+                            {{/if}}
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+
+            {{#unless categoryFAQs}}
+            <div class="no-faqs">
+                <p>このカテゴリには現在FAQがありません。</p>
+                <a href="index.html" class="back-link">すべてのFAQを見る</a>
+            </div>
+            {{/unless}}
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            {{#if footerText}}
+            <p>{{footerText}}</p>
+            {{else}}
+            <p>&copy; {{application.name}} - FAQ</p>
+            {{/if}}
+            <p class="generated-at">最終更新: {{formatDate generatedAt}}</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/script.js"></script>
+</body>
+</html>

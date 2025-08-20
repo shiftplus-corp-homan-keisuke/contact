@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{siteTitle}}</title>
+    <meta name="description" content="{{siteDescription}}">
+    <link rel="stylesheet" href="assets/css/style.css">
+    {{#if customCss}}
+    <style>
+        {{{customCss}}}
+    </style>
+    {{/if}}
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            {{#if logoUrl}}
+            <img src="{{logoUrl}}" alt="{{application.name}}" class="logo">
+            {{/if}}
+            <h1 class="site-title">{{siteTitle}}</h1>
+            <p class="site-description">{{siteDescription}}</p>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            {{#if enableSearch}}
+            <div class="search-section">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="FAQを検索..." class="search-input">
+                    <button type="button" id="searchButton" class="search-button">検索</button>
+                </div>
+            </div>
+            {{/if}}
+
+            {{#if enableCategoryFilter}}
+            <div class="category-filter">
+                <h3>カテゴリで絞り込み</h3>
+                <div class="category-buttons">
+                    <button type="button" class="category-btn active" data-category="all">すべて</button>
+                    {{#each categories}}
+                    <button type="button" class="category-btn" data-category="{{this}}">{{this}}</button>
+                    {{/each}}
+                </div>
+            </div>
+            {{/if}}
+
+            <div class="faq-section">
+                <h2>よくある質問</h2>
+                
+                {{#if categories}}
+                {{#each categorizedFAQs}}
+                <div class="category-section" data-category="{{@key}}">
+                    <h3 class="category-title">{{@key}}</h3>
+                    <div class="faq-list">
+                        {{#each this}}
+                        <div class="faq-item" data-category="{{category}}">
+                            <div class="faq-question" data-faq-id="{{id}}">
+                                <h4>{{question}}</h4>
+                                <span class="toggle-icon">+</span>
+                            </div>
+                            <div class="faq-answer" id="answer-{{id}}">
+                                <div class="answer-content">
+                                    {{{answer}}}
+                                </div>
+                                {{#if tags}}
+                                <div class="faq-tags">
+                                    {{#each tags}}
+                                    <span class="tag">{{this}}</span>
+                                    {{/each}}
+                                </div>
+                                {{/if}}
+                            </div>
+                        </div>
+                        {{/each}}
+                    </div>
+                </div>
+                {{/each}}
+                {{else}}
+                <div class="faq-list">
+                    {{#each faqs}}
+                    <div class="faq-item" data-category="{{category}}">
+                        <div class="faq-question" data-faq-id="{{id}}">
+                            <h4>{{question}}</h4>
+                            <span class="toggle-icon">+</span>
+                        </div>
+                        <div class="faq-answer" id="answer-{{id}}">
+                            <div class="answer-content">
+                                {{{answer}}}
+                            </div>
+                            {{#if tags}}
+                            <div class="faq-tags">
+                                {{#each tags}}
+                                <span class="tag">{{this}}</span>
+                                {{/each}}
+                            </div>
+                            {{/if}}
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+                {{/if}}
+            </div>
+
+            {{#unless faqs}}
+            <div class="no-faqs">
+                <p>現在、公開されているFAQはありません。</p>
+            </div>
+            {{/unless}}
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            {{#if footerText}}
+            <p>{{footerText}}</p>
+            {{else}}
+            <p>&copy; {{application.name}} - FAQ</p>
+            {{/if}}
+            <p class="generated-at">最終更新: {{formatDate generatedAt}}</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/script.js"></script>
+</body>
+</html>
