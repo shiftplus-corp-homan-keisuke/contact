@@ -29,8 +29,7 @@ import {
     ApiResponse,
     ApiParam,
     ApiQuery,
-    ApiBearerAuth,
-    ApiKeyAuth
+    ApiBearerAuth
 } from '@nestjs/swagger';
 
 import { InquiriesService } from '../services/inquiries.service';
@@ -171,7 +170,7 @@ export class InquiriesController {
 
         this.logger.log(`問い合わせ検索完了: 総件数=${result.meta.total}`);
         return new PaginatedApiResponseDto(
-            result.data,
+            result.items,
             result.meta.total,
             result.meta.page,
             result.meta.limit,
@@ -372,13 +371,15 @@ export class InquiriesController {
             createdAt: item.createdAt,
         }));
 
-        return new PaginatedApiResponseDto(
-            searchResults,
-            result.total,
-            result.page,
-            result.limit,
-            '検索結果を正常に取得しました'
-        );
+        return {
+            items: searchResults,
+            total: result.total,
+            page: result.page,
+            limit: result.limit,
+            totalPages: Math.ceil(result.total / result.limit),
+            hasNext: result.page < Math.ceil(result.total / result.limit),
+            hasPrev: result.page > 1,
+        };
     }
 
     /**

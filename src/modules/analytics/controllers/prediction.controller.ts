@@ -116,7 +116,7 @@ export class PredictionController {
         name: 'period',
         required: false,
         description: '予測期間',
-        default: 'next_month'
+        example: 'next_month'
     })
     @ApiResponse({
         status: HttpStatus.OK,

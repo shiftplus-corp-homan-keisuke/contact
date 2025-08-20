@@ -17,7 +17,7 @@ import { PermissionsGuard } from '../guards/permissions.guard';
 import { CreateUserDto, UpdateUserDto } from '../dto/user.dto';
 import { User, UserHistory } from '../entities';
 import { Permission } from '../decorators/permissions.decorator';
-import { CurrentUser } from '../../../common/decorators/current-user.decorator';
+import { CurrentUser } from '../../../common/decorators';
 import { UserContext } from '../../auth/types/auth.types';
 
 @ApiTags('ユーザー管理')

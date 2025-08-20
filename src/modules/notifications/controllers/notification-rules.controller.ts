@@ -16,7 +16,7 @@ import { CurrentUser } from '../../../common/decorators';
 import { User } from '../../users/entities';
 import { NotificationRuleEngineService } from '../services';
 import { NotificationTrigger, NotificationContext } from '../types';
-import { ApiResponseDto } from '../../../common/dto';
+import { ApiResponseDto, ApiSuccessResponseDto } from '../../../common/dto';
 
 @ApiTags('notification-rules')
 @ApiBearerAuth()
@@ -32,7 +32,7 @@ export class NotificationRulesController {
     @ApiResponse({
         status: HttpStatus.OK,
         description: '通知ルールが正常に実行されました',
-        type: ApiResponseDto,
+        type: ApiSuccessResponseDto,
     })
     async executeRules(
         @Body() request: {
@@ -58,7 +58,7 @@ export class NotificationRulesController {
     @ApiResponse({
         status: HttpStatus.OK,
         description: '通知ルールのテストが正常に実行されました',
-        type: ApiResponseDto,
+        type: ApiSuccessResponseDto,
     })
     async testRule(
         @Body() request: {
@@ -81,7 +81,7 @@ export class NotificationRulesController {
     @ApiResponse({
         status: HttpStatus.OK,
         description: '遅延通知が正常にキャンセルされました',
-        type: ApiResponseDto,
+        type: ApiSuccessResponseDto,
     })
     async cancelDelayedNotification(
         @Param('delayId') delayId: string,
@@ -100,7 +100,7 @@ export class NotificationRulesController {
     @ApiResponse({
         status: HttpStatus.OK,
         description: 'ルールエンジンの統計情報を取得しました',
-        type: ApiResponseDto,
+        type: ApiSuccessResponseDto,
     })
     async getEngineStats(): Promise<ApiResponseDto<{
         activeRules: number;

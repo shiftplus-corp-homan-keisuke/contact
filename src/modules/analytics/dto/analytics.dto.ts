@@ -171,10 +171,11 @@ export class RealTimeUpdateDto {
 
     @ApiProperty({ description: 'タイムスタンプ' })
     timestamp: Date;
-}/
-    **
+}
+
+/**
  * パフォーマンス分析用DTO
-    */
+ */
 export class UserPerformanceQueryDto extends AnalyticsFiltersDto {
     @ApiPropertyOptional({ description: 'ユーザーID' })
     @IsOptional()

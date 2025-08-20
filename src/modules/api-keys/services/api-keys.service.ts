@@ -55,6 +55,7 @@ export class ApiKeysService {
                     windowMs: keyRecord.rateLimitWindow * 1000, // 秒をミリ秒に変換
                     maxRequests: keyRecord.rateLimitMax,
                 },
+                isActive: keyRecord.isActive,
                 expiresAt: keyRecord.expiresAt,
                 lastUsedAt: keyRecord.lastUsedAt,
             };
@@ -114,5 +115,124 @@ export class ApiKeysService {
         // 簡易実装（実際にはbcryptやscryptなどを使用）
         const crypto = require('crypto');
         return crypto.createHash('sha256').update(apiKey).digest('hex');
+    }
+    /**
+     * 全てのAPIキーを取得
+     */
+    async findAll(): Promise<ApiKey[]> {
+        return this.apiKeyRepository.find({
+            relations: ['application'],
+            order: { createdAt: 'DESC' },
+        });
+    }
+
+    /**
+     * IDでAPIキーを取得
+     */
+    async findById(id: string): Promise<ApiKey | null> {
+        return this.apiKeyRepository.findOne({
+            where: { id },
+            relations: ['application'],
+        });
+    }
+
+    /**
+     * APIキーを作成
+     */
+    async create(createDto: any): Promise<{ apiKey: ApiKey; plainKey: string }> {
+        // 新しいAPIキーを生成
+        const plainKey = this.generateApiKey();
+        const keyHash = this.hashApiKey(plainKey);
+
+        const apiKeyData = {
+            ...createDto,
+            keyHash,
+            usageCount: 0,
+        };
+
+        const apiKey = this.apiKeyRepository.create(apiKeyData);
+        const savedApiKey = await this.apiKeyRepository.save(apiKey);
+
+        return {
+            apiKey: Array.isArray(savedApiKey) ? savedApiKey[0] : savedApiKey,
+            plainKey,
+        };
+    }
+
+    /**
+     * APIキーを更新
+     */
+    async update(id: string, updateDto: any): Promise<ApiKey | null> {
+        await this.apiKeyRepository.update(id, updateDto);
+        return this.findById(id);
+    }
+
+    /**
+     * APIキーを削除
+     */
+    async remove(id: string): Promise<void> {
+        await this.apiKeyRepository.delete(id);
+    }
+
+    /**
+     * APIキーを再生成
+     */
+    async regenerate(id: string): Promise<{ apiKey: ApiKey; plainKey: string }> {
+        const apiKey = await this.findById(id);
+        if (!apiKey) {
+            throw new Error('APIキーが見つかりません');
+        }
+
+        // 新しいキーを生成
+        const plainKey = this.generateApiKey();
+        const keyHash = this.hashApiKey(plainKey);
+
+        await this.apiKeyRepository.update(id, {
+            keyHash,
+            lastUsedAt: null,
+            usageCount: 0,
+        });
+
+        const updatedApiKey = await this.findById(id);
+        return {
+            apiKey: updatedApiKey,
+            plainKey,
+        };
+    }
+
+    /**
+     * 使用統計を取得
+     */
+    async getUsageStats(id: string, days?: number): Promise<any> {
+        const apiKey = await this.findById(id);
+        if (!apiKey) {
+            throw new Error('APIキーが見つかりません');
+        }
+
+        return {
+            totalUsage: apiKey.usageCount,
+            lastUsedAt: apiKey.lastUsedAt,
+            // 実際の実装では詳細な統計データを返す
+        };
+    }
+
+    /**
+     * レート制限チェック
+     */
+    async checkRateLimit(apiKey: string): Promise<any> {
+        // 実際の実装ではRedisなどを使用してレート制限をチェック
+        return {
+            allowed: true,
+            remaining: 100,
+            resetTime: new Date(Date.now() + 3600000), // 1時間後
+        };
+    }
+
+    /**
+     * APIキーを生成
+     */
+    private generateApiKey(): string {
+        const crypto = require('crypto');
+        return crypto.randomBytes(32).toString('hex');
     }
 }

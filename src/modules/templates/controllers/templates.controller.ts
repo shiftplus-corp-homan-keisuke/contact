@@ -55,8 +55,26 @@ export class TemplatesController {
         @Body() createTemplateDto: CreateTemplateDto,
         @Request() req: any,
     ): Promise<Template> {
+        // DTOをCreateTemplateRequestに変換
+        const createRequest = {
+            name: createTemplateDto.name,
+            category: createTemplateDto.category,
+            content: createTemplateDto.content,
+            variables: createTemplateDto.variables?.map(v => ({
+                id: '', // 新規作成時は空文字
+                name: v.name,
+                type: v.type,
+                description: v.description,
+                defaultValue: v.defaultValue,
+                required: v.required,
+                options: v.options,
+            })),
+            tags: createTemplateDto.tags,
+            isShared: createTemplateDto.isShared,
+        };
+
         return await this.templatesService.createTemplate(
-            createTemplateDto,
+            createRequest,
             req.user.id,
         );
     }
@@ -118,9 +136,27 @@ export class TemplatesController {
         @Body() updateTemplateDto: UpdateTemplateDto,
         @Request() req: any,
     ): Promise<Template> {
+        // DTOをUpdateTemplateRequestに変換
+        const updateRequest = {
+            name: updateTemplateDto.name,
+            category: updateTemplateDto.category,
+            content: updateTemplateDto.content,
+            variables: updateTemplateDto.variables?.map(v => ({
+                id: '', // 更新時は空文字（サービス側で処理）
+                name: v.name,
+                type: v.type,
+                description: v.description,
+                defaultValue: v.defaultValue,
+                required: v.required,
+                options: v.options,
+            })),
+            tags: updateTemplateDto.tags,
+            isShared: updateTemplateDto.isShared,
+        };
+
         return await this.templatesService.updateTemplate(
             id,
-            updateTemplateDto,
+            updateRequest,
             req.user.id,
         );
     }

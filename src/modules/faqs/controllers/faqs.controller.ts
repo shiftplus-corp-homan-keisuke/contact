@@ -271,68 +271,68 @@ export class FAQsController {
             message: `${faqs.length}件のFAQの公開状態を更新しました`,
         };
     }
-}
-@P
-ost('apps/:appId/generate')
-@RequirePermissions('faq:generate')
-@ApiOperation({ summary: '自動FAQ生成' })
-@ApiResponse({
-    status: HttpStatus.CREATED,
-    description: '自動FAQ生成成功',
-    type: [FAQResponseDto],
-})
-async generateFAQ(
-    @Param('appId', ParseUUIDPipe) appId: string,
-    @Body() options: FAQGenerationOptionsDto,
-): Promise < BaseResponseDto < FAQResponseDto[] >> {
-    // DTOをオプション型に変換
-    const generationOptions = {
-        minClusterSize: options.minClusterSize,
-        maxClusters: options.maxClusters,
-        similarityThreshold: options.similarityThreshold,
-        dateRange: options.startDate && options.endDate ? {
-            startDate: new Date(options.startDate),
-            endDate: new Date(options.endDate),
-        } : undefined,
-        categories: options.categories,
-    };
 
-    const faqs = await this.faqsService.generateFAQ(appId, generationOptions);
-    return {
-        success: true,
-        data: faqs as FAQResponseDto[],
-        message: `${faqs.length}件のFAQを自動生成しました`,
-    };
-}
+    @Post('apps/:appId/generate')
+    @RequirePermissions('faq:generate')
+    @ApiOperation({ summary: '自動FAQ生成' })
+    @ApiResponse({
+        status: HttpStatus.CREATED,
+        description: '自動FAQ生成成功',
+        type: [FAQResponseDto],
+    })
+    async generateFAQ(
+        @Param('appId', ParseUUIDPipe) appId: string,
+        @Body() options: FAQGenerationOptionsDto,
+    ): Promise<BaseResponseDto<FAQResponseDto[]>> {
+        // DTOをオプション型に変換
+        const generationOptions = {
+            minClusterSize: options.minClusterSize,
+            maxClusters: options.maxClusters,
+            similarityThreshold: options.similarityThreshold,
+            dateRange: options.startDate && options.endDate ? {
+                startDate: new Date(options.startDate),
+                endDate: new Date(options.endDate),
+            } : undefined,
+            categories: options.categories,
+        };
 
-@Post('apps/:appId/generate/preview')
-@RequirePermissions('faq:generate')
-@ApiOperation({ summary: 'FAQ生成プレビュー' })
-@ApiResponse({
-    status: HttpStatus.OK,
-    description: 'FAQ生成プレビュー成功',
-    type: [FAQClusterResponseDto],
-})
-async previewFAQGeneration(
-    @Param('appId', ParseUUIDPipe) appId: string,
-    @Body() options: FAQGenerationOptionsDto,
-): Promise < BaseResponseDto < FAQClusterResponseDto[] >> {
-    // DTOをオプション型に変換
-    const generationOptions = {
-        minClusterSize: options.minClusterSize,
-        maxClusters: options.maxClusters,
-        similarityThreshold: options.similarityThreshold,
-        dateRange: options.startDate && options.endDate ? {
-            startDate: new Date(options.startDate),
-            endDate: new Date(options.endDate),
-        } : undefined,
-        categories: options.categories,
-    };
+        const faqs = await this.faqsService.generateFAQ(appId, generationOptions);
+        return {
+            success: true,
+            data: faqs as FAQResponseDto[],
+            message: `${faqs.length}件のFAQを自動生成しました`,
+        };
+    }
 
-    const clusters = await this.faqsService.previewGeneratedFAQ(appId, generationOptions);
-    return {
-        success: true,
-        data: clusters as FAQClusterResponseDto[],
-        message: `${clusters.length}件のFAQ候補を生成しました`,
-    };
+    @Post('apps/:appId/generate/preview')
+    @RequirePermissions('faq:generate')
+    @ApiOperation({ summary: 'FAQ生成プレビュー' })
+    @ApiResponse({
+        status: HttpStatus.OK,
+        description: 'FAQ生成プレビュー成功',
+        type: [FAQClusterResponseDto],
+    })
+    async previewFAQGeneration(
+        @Param('appId', ParseUUIDPipe) appId: string,
+        @Body() options: FAQGenerationOptionsDto,
+    ): Promise<BaseResponseDto<FAQClusterResponseDto[]>> {
+        // DTOをオプション型に変換
+        const generationOptions = {
+            minClusterSize: options.minClusterSize,
+            maxClusters: options.maxClusters,
+            similarityThreshold: options.similarityThreshold,
+            dateRange: options.startDate && options.endDate ? {
+                startDate: new Date(options.startDate),
+                endDate: new Date(options.endDate),
+            } : undefined,
+            categories: options.categories,
+        };
+
+        const clusters = await this.faqsService.previewGeneratedFAQ(appId, generationOptions);
+        return {
+            success: true,
+            data: clusters as FAQClusterResponseDto[],
+            message: `${clusters.length}件のFAQ候補を生成しました`,
+        };
+    }
 }

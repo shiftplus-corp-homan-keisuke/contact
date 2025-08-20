@@ -5,11 +5,11 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class SeedInitialData1691234567892 implements MigrationInterface {
-    name = 'SeedInitialData1691234567892';
+  name = 'SeedInitialData1691234567892';
 
-    public async up(queryRunner: QueryRunner): Promise<void> {
-        // 基本ロールの作成
-        await queryRunner.query(`
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    // 基本ロールの作成
+    await queryRunner.query(`
       INSERT INTO "roles" ("id", "name", "description", "permissions", "isActive") VALUES
       ('550e8400-e29b-41d4-a716-446655440001', 'admin', 'システム管理者', 
        '["user:create", "user:read", "user:update", "user:delete", "inquiry:create", "inquiry:read", "inquiry:update", "inquiry:delete", "response:create", "response:read", "response:update", "response:delete", "faq:create", "faq:read", "faq:update", "faq:delete", "app:create", "app:read", "app:update", "app:delete", "api_key:create", "api_key:read", "api_key:update", "api_key:delete", "analytics:read", "system:admin"]', 
@@ -25,8 +25,8 @@ export class SeedInitialData1691234567892 implements MigrationInterface {
        true)
     `);
 
-        // 管理者ユーザーの作成（パスワード: admin123）
-        await queryRunner.query(`
+    // 管理者ユーザーの作成（パスワード: admin123）
+    await queryRunner.query(`
       INSERT INTO "users" ("id", "email", "passwordHash", "name", "roleId", "isActive") VALUES
       ('550e8400-e29b-41d4-a716-446655440010', 'admin@example.com', 
        '$2b$10$rOzJqQZQZQZQZQZQZQZQZOzJqQZQZQZQZQZQZQZQZOzJqQZQZQZQZQ', 
@@ -36,8 +36,8 @@ export class SeedInitialData1691234567892 implements MigrationInterface {
        'サポート担当者', '550e8400-e29b-41d4-a716-446655440002', true)
     `);
 
-        // サンプルアプリケーションの作成
-        await queryRunner.query(`
+    // サンプルアプリケーションの作成
+    await queryRunner.query(`
       INSERT INTO "applications" ("id", "name", "description", "apiKey", "isActive", "contactEmail", "contactName") VALUES
       ('550e8400-e29b-41d4-a716-446655440020', 'Sample App 1', 'サンプルアプリケーション1', 
        'sk_test_1234567890abcdef', true, 'app1@example.com', 'アプリ1担当者'),
@@ -45,8 +45,8 @@ export class SeedInitialData1691234567892 implements MigrationInterface {
        'sk_test_abcdef1234567890', true, 'app2@example.com', 'アプリ2担当者')
     `);
 
-        // サンプル問い合わせの作成
-        await queryRunner.query(`
+    // サンプル問い合わせの作成
+    await queryRunner.query(`
       INSERT INTO "inquiries" ("id", "appId", "title", "content", "status", "priority", "category", "customerEmail", "customerName") VALUES
       ('550e8400-e29b-41d4-a716-446655440030', '550e8400-e29b-41d4-a716-446655440020', 
        'ログインできない問題', 'ログイン画面でメールアドレスとパスワードを入力してもログインできません。', 
@@ -59,8 +59,8 @@ export class SeedInitialData1691234567892 implements MigrationInterface {
        'resolved', 'low', '使い方', 'customer3@example.com', '顧客3')
     `);
 
-        // サンプル回答の作成
-        await queryRunner.query(`
+    // サンプル回答の作成
+    await queryRunner.query(`
       INSERT INTO "responses" ("id", "inquiryId", "userId", "content", "isPublic") VALUES
       ('550e8400-e29b-41d4-a716-446655440040', '550e8400-e29b-41d4-a716-446655440031', 
        '550e8400-e29b-41d4-a716-446655440011', 
@@ -72,8 +72,8 @@ export class SeedInitialData1691234567892 implements MigrationInterface {
        true)
     `);
 
-        // サンプルFAQの作成
-        await queryRunner.query(`
+    // サンプルFAQの作成
+    await queryRunner.query(`
       INSERT INTO "faqs" ("id", "appId", "question", "answer", "category", "isPublished", "orderIndex") VALUES
       ('550e8400-e29b-41d4-a716-446655440050', '550e8400-e29b-41d4-a716-446655440020', 
        'パスワードを忘れた場合はどうすればよいですか？', 
@@ -89,8 +89,8 @@ export class SeedInitialData1691234567892 implements MigrationInterface {
        'サポート', true, 1)
     `);
 
-        // APIキーの作成
-        await queryRunner.query(`
+    // APIキーの作成
+    await queryRunner.query(`
       INSERT INTO "api_keys" ("id", "appId", "keyHash", "name", "permissions", "rateLimitPerHour", "isActive") VALUES
       ('550e8400-e29b-41d4-a716-446655440060', '550e8400-e29b-41d4-a716-446655440020', 
        '$2b$10$rOzJqQZQZQZQZQZQZQZQZOzJqQZQZQZQZQZQZQZQZOzJqQZQZQZQZQ', 
@@ -99,16 +99,16 @@ export class SeedInitialData1691234567892 implements MigrationInterface {
        '$2b$10$sOzJqQZQZQZQZQZQZQZQZOzJqQZQZQZQZQZQZQZQZOzJqQZQZQZQZQ', 
        'App2 Production Key', '["inquiry:create", "inquiry:read", "faq:read"]', 500, true)
     `);
-    }
+  }
 
-    public async down(queryRunner: QueryRunner): Promise<void> {
-        // データの削除（外部キー制約により順序が重要）
-        await queryRunner.query(`DELETE FROM "api_keys"`);
-        await queryRunner.query(`DELETE FROM "faqs"`);
-        await queryRunner.query(`DELETE FROM "responses"`);
-        await queryRunner.query(`DELETE FROM "inquiries"`);
-        await queryRunner.query(`DELETE FROM "applications"`);
-        await queryRunner.query(`DELETE FROM "users"`);
-        await queryRunner.query(`DELETE FROM "roles"`);
-    }
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    // データの削除（外部キー制約により順序が重要）
+    await queryRunner.query(`DELETE FROM "api_keys"`);
+    await queryRunner.query(`DELETE FROM "faqs"`);
+    await queryRunner.query(`DELETE FROM "responses"`);
+    await queryRunner.query(`DELETE FROM "inquiries"`);
+    await queryRunner.query(`DELETE FROM "applications"`);
+    await queryRunner.query(`DELETE FROM "users"`);
+    await queryRunner.query(`DELETE FROM "roles"`);
+  }
 }

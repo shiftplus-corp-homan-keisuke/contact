@@ -18,9 +18,16 @@ describe('FAQsService', () => {
         orderIndex: 0,
         isPublished: false,
         tags: ['tag1', 'tag2'],
+        viewCount: 0,
         createdAt: new Date(),
         updatedAt: new Date(),
-        application: null,
+        application: {
+            id: 'app-1',
+            name: 'テストアプリ',
+            description: 'テスト用アプリケーション',
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        } as any, // テスト用の簡易モック
     };
 
     const mockRepository = {

@@ -22,6 +22,8 @@ export interface ApiKeyContext {
         /** 制限期間内の最大リクエスト数 */
         maxRequests: number;
     };
+    /** アクティブ状態 */
+    isActive: boolean;
     /** 有効期限 */
     expiresAt?: Date;
     /** 最終使用日時 */

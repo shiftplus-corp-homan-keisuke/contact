@@ -39,15 +39,8 @@ export interface UserContext {
     permissions: string[];
 }
 
-/**
- * APIキーコンテキスト
- */
-export interface ApiKeyContext {
-    appId: string;
-    permissions: string[];
-    rateLimit: RateLimitConfig;
-    isActive: boolean;
-}
+// ApiKeyContextは src/modules/api-keys/types/api-key.types.ts で定義されています
+export type { ApiKeyContext } from '../../api-keys/types/api-key.types';
 
 /**
  * レート制限設定

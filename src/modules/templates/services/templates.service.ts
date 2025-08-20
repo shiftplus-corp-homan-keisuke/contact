@@ -41,17 +41,23 @@ export class TemplatesService {
         userId: string,
     ): Promise<Template> {
         try {
-            // テンプレート作成
+            // テンプレート作成（variablesを除外）
+            const { variables, ...templateCreateData } = templateData;
             const template = await this.templatesRepository.create({
-                ...templateData,
+                ...templateCreateData,
                 createdBy: userId,
                 isShared: templateData.isShared || false,
             });
 
             // 変数がある場合は作成
             if (templateData.variables && templateData.variables.length > 0) {
-                const variables = templateData.variables.map((variable, index) => ({
-                    ...variable,
+                const variables = templateData.variables.map((variable: any, index) => ({
+                    name: variable.name,
+                    type: variable.type,
+                    description: variable.description,
+                    defaultValue: variable.defaultValue,
+                    required: variable.required,
+                    options: variable.options,
                     templateId: template.id,
                     orderIndex: variable.orderIndex || index,
                 }));
@@ -110,8 +116,13 @@ export class TemplatesService {
 
                 // 新しい変数を作成
                 if (updateData.variables.length > 0) {
-                    const variables = updateData.variables.map((variable, index) => ({
-                        ...variable,
+                    const variables = updateData.variables.map((variable: any, index) => ({
+                        name: variable.name,
+                        type: variable.type,
+                        description: variable.description,
+                        defaultValue: variable.defaultValue,
+                        required: variable.required,
+                        options: variable.options,
                         templateId: id,
                         orderIndex: variable.orderIndex || index,
                     }));

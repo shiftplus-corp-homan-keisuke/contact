@@ -163,7 +163,14 @@ export class WorkflowController {
         const availableTransitions = this.workflowService.getAvailableTransitions(currentStatus);
 
         // 各遷移のルールを取得
-        const transitionRules: Record<InquiryStatus, any> = {};
+        const transitionRules: Record<InquiryStatus, any> = {
+            new: {},
+            in_progress: {},
+            pending: {},
+            resolved: {},
+            closed: {}
+        };
+
         availableTransitions.forEach(status => {
             const action = this.workflowService.getStatusChangeAction(status);
             transitionRules[status] = {

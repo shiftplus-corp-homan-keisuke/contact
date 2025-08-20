@@ -1,6 +1,6 @@
-import { IsOptional, IsString, IsBoolean, IsArray, IsUUID } from 'class-validator';
+import { IsOptional, IsString, IsBoolean, IsArray, IsUUID, IsNumber, Min } from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 
 export class FAQFiltersDto {
     @ApiPropertyOptional({ description: 'アプリケーションID' })
@@ -30,4 +30,18 @@ export class FAQFiltersDto {
     @IsOptional()
     @IsString()
     search?: string;
+
+    @ApiPropertyOptional({ description: 'ページ番号', minimum: 1, default: 1 })
+    @IsOptional()
+    @Type(() => Number)
+    @IsNumber()
+    @Min(1)
+    page?: number;
+
+    @ApiPropertyOptional({ description: '1ページあたりの件数', minimum: 1, maximum: 100, default: 20 })
+    @IsOptional()
+    @Type(() => Number)
+    @IsNumber()
+    @Min(1)
+    limit?: number;
 }

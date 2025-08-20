@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, Table, ForeignKey, Index } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table, TableForeignKey, TableIndex } from 'typeorm';
 
 export class CreateSlaMonitoringTables1691234567898 implements MigrationInterface {
     name = 'CreateSlaMonitoringTables1691234567898';
@@ -209,132 +209,177 @@ export class CreateSlaMonitoringTables1691234567898 implements MigrationInterfac
         // 外部キー制約を追加
         await queryRunner.createForeignKey(
             'sla_configs',
-            new ForeignKey({
+            new TableForeignKey({
                 columnNames: ['app_id'],
                 referencedTableName: 'applications',
                 referencedColumnNames: ['id'],
                 onDelete: 'CASCADE',
+                name: 'FK_sla_configs_app_id',
             }),
         );
 
         await queryRunner.createForeignKey(
             'sla_violations',
-            new ForeignKey({
+            new TableForeignKey({
                 columnNames: ['inquiry_id'],
                 referencedTableName: 'inquiries',
                 referencedColumnNames: ['id'],
                 onDelete: 'CASCADE',
+                name: 'FK_sla_violations_inquiry_id',
             }),
         );
 
         await queryRunner.createForeignKey(
             'sla_violations',
-            new ForeignKey({
+            new TableForeignKey({
                 columnNames: ['sla_config_id'],
                 referencedTableName: 'sla_configs',
                 referencedColumnNames: ['id'],
                 onDelete: 'CASCADE',
+                name: 'FK_sla_violations_sla_config_id',
             }),
         );
 
         await queryRunner.createForeignKey(
             'sla_violations',
-            new ForeignKey({
+            new TableForeignKey({
                 columnNames: ['resolved_by'],
                 referencedTableName: 'users',
                 referencedColumnNames: ['id'],
                 onDelete: 'SET NULL',
+                name: 'FK_sla_violations_resolved_by',
             }),
         );
 
         await queryRunner.createForeignKey(
             'escalations',
-            new ForeignKey({
+            new TableForeignKey({
                 columnNames: ['inquiry_id'],
                 referencedTableName: 'inquiries',
                 referencedColumnNames: ['id'],
                 onDelete: 'CASCADE',
+                name: 'FK_escalations_inquiry_id',
             }),
         );
 
         await queryRunner.createForeignKey(
             'escalations',
-            new ForeignKey({
+            new TableForeignKey({
                 columnNames: ['escalated_from'],
                 referencedTableName: 'users',
                 referencedColumnNames: ['id'],
                 onDelete: 'SET NULL',
+                name: 'FK_escalations_escalated_from',
             }),
         );
 
         await queryRunner.createForeignKey(
             'escalations',
-            new ForeignKey({
+            new TableForeignKey({
                 columnNames: ['escalated_to'],
                 referencedTableName: 'users',
                 referencedColumnNames: ['id'],
                 onDelete: 'CASCADE',
+                name: 'FK_escalations_escalated_to',
             }),
         );
 
         await queryRunner.createForeignKey(
             'escalations',
-            new ForeignKey({
+            new TableForeignKey({
                 columnNames: ['escalated_by'],
                 referencedTableName: 'users',
                 referencedColumnNames: ['id'],
                 onDelete: 'SET NULL',
+                name: 'FK_escalations_escalated_by',
             }),
         );
 
         // インデックスを追加
         await queryRunner.createIndex(
             'sla_configs',
-            new Index('idx_sla_configs_app_priority', ['app_id', 'priority']),
+            new TableIndex({
+                name: 'idx_sla_configs_app_priority',
+                columnNames: ['app_id', 'priority'],
+            }),
         );
 
         await queryRunner.createIndex(
             'sla_violations',
-            new Index('idx_sla_violations_inquiry', ['inquiry_id']),
+            new TableIndex({
+                name: 'idx_sla_violations_inquiry',
+                columnNames: ['inquiry_id'],
+            }),
         );
 
         await queryRunner.createIndex(
             'sla_violations',
-            new Index('idx_sla_violations_detected_at', ['detected_at']),
+            new TableIndex({
+                name: 'idx_sla_violations_detected_at',
+                columnNames: ['detected_at'],
+            }),
         );
 
         await queryRunner.createIndex(
             'sla_violations',
-            new Index('idx_sla_violations_severity', ['severity']),
+            new TableIndex({
+                name: 'idx_sla_violations_severity',
+                columnNames: ['severity'],
+            }),
         );
 
         await queryRunner.createIndex(
             'sla_violations',
-            new Index('idx_sla_violations_resolved', ['is_resolved']),
+            new TableIndex({
+                name: 'idx_sla_violations_resolved',
+                columnNames: ['is_resolved'],
+            }),
         );
 
         await queryRunner.createIndex(
             'escalations',
-            new Index('idx_escalations_inquiry', ['inquiry_id']),
+            new TableIndex({
+                name: 'idx_escalations_inquiry',
+                columnNames: ['inquiry_id'],
+            }),
         );
 
         await queryRunner.createIndex(
             'escalations',
-            new Index('idx_escalations_escalated_at', ['escalated_at']),
+            new TableIndex({
+                name: 'idx_escalations_escalated_at',
+                columnNames: ['escalated_at'],
+            }),
         );
 
         await queryRunner.createIndex(
             'escalations',
-            new Index('idx_escalations_escalated_to', ['escalated_to']),
+            new TableIndex({
+                name: 'idx_escalations_escalated_to',
+                columnNames: ['escalated_to'],
+            }),
         );
 
         await queryRunner.createIndex(
             'escalations',
-            new Index('idx_escalations_automatic', ['is_automatic']),
+            new TableIndex({
+                name: 'idx_escalations_automatic',
+                columnNames: ['is_automatic'],
+            }),
         );
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+        // 外部キー制約を削除
+        await queryRunner.dropForeignKey('escalations', 'FK_escalations_escalated_by');
+        await queryRunner.dropForeignKey('escalations', 'FK_escalations_escalated_to');
+        await queryRunner.dropForeignKey('escalations', 'FK_escalations_escalated_from');
+        await queryRunner.dropForeignKey('escalations', 'FK_escalations_inquiry_id');
+        await queryRunner.dropForeignKey('sla_violations', 'FK_sla_violations_resolved_by');
+        await queryRunner.dropForeignKey('sla_violations', 'FK_sla_violations_sla_config_id');
+        await queryRunner.dropForeignKey('sla_violations', 'FK_sla_violations_inquiry_id');
+        await queryRunner.dropForeignKey('sla_configs', 'FK_sla_configs_app_id');
+
         // インデックスを削除
         await queryRunner.dropIndex('escalations', 'idx_escalations_automatic');
         await queryRunner.dropIndex('escalations', 'idx_escalations_escalated_to');

@@ -19,7 +19,7 @@ import { PermissionsGuard } from '../../users/guards/permissions.guard';
 import { CreateApiKeyDto, UpdateApiKeyDto, GetUsageStatsDto } from '../dto/api-key.dto';
 import { ApiKey } from '../entities/api-key.entity';
 import { Permission } from '../../users/decorators/permissions.decorator';
-import { CurrentUser } from '../../../common/decorators/current-user.decorator';
+import { CurrentUser } from '../../../common/decorators';
 import { UserContext } from '../../auth/types/auth.types';
 
 @ApiTags('APIキー管理')

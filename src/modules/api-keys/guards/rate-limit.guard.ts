@@ -8,6 +8,7 @@ import {
     CanActivate,
     ExecutionContext,
     Logger,
+    SetMetadata,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
@@ -36,18 +37,7 @@ export interface RateLimitConfig {
 /**
  * レート制限デコレーター
  */
-export const RateLimit = (config: RateLimitConfig) => {
-    return (target: any, propertyKey?: string, descriptor?: PropertyDescriptor) => {
-        const reflector = new Reflector();
-        if (descriptor) {
-            // メソッドレベル
-            reflector.set(RATE_LIMIT_KEY, config, descriptor.value);
-        } else {
-            // クラスレベル
-            reflector.set(RATE_LIMIT_KEY, config, target);
-        }
-    };
-};
+export const RateLimit = (config: RateLimitConfig) => SetMetadata(RATE_LIMIT_KEY, config);
 
 @Injectable()
 export class RateLimitGuard implements CanActivate {

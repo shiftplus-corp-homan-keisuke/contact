@@ -290,78 +290,82 @@ export class FAQsService {
 
         return updatedFAQs;
     }
-}
-  /**
 
-   * 自動FAQ生成
-   */
-  async generateFAQ(appId: string, options: FAQGenerationOptions): Promise < FAQ[] > {
-    try {
-        // クラスタリングによるFAQ候補生成
-        const faqClusters = await this.faqClusteringService.generateFAQClusters(appId, options);
+    /**
+     * 自動FAQ生成
+     */
+    async generateFAQ(appId: string, options: FAQGenerationOptions): Promise<FAQ[]> {
+        try {
+            // クラスタリングによるFAQ候補生成
+            const faqClusters = await this.faqClusteringService.generateFAQClusters(appId, options);
 
-        // FAQ候補をFAQエンティティとして作成
-        const generatedFAQs: FAQ[] = [];
+            // FAQ候補をFAQエンティティとして作成
+            const generatedFAQs: FAQ[] = [];
 
-        for(const cluster of faqClusters) {
-            const createFAQDto: CreateFAQDto = {
-                appId,
-                question: cluster.representativeQuestion,
-                answer: cluster.suggestedAnswer,
-                category: cluster.category,
-                isPublished: false, // 自動生成されたFAQは非公開で作成
-                tags: ['自動生成'],
-            };
+            for (const cluster of faqClusters) {
+                const createFAQDto: CreateFAQDto = {
+                    appId,
+                    question: cluster.representativeQuestion,
+                    answer: cluster.suggestedAnswer,
+                    category: cluster.category,
+                    isPublished: false, // 自動生成されたFAQは非公開で作成
+                    tags: ['自動生成'],
+                };
 
-            const faq = await this.createFAQ(createFAQDto);
-            generatedFAQs.push(faq);
+                const faq = await this.createFAQ(createFAQDto);
+                generatedFAQs.push(faq);
+            }
+
+            return generatedFAQs;
+        } catch (error) {
+            throw new BadRequestException('FAQ自動生成に失敗しました');
         }
-      
-      return generatedFAQs;
-    } catch(error) {
-        throw new BadRequestException('FAQ自動生成に失敗しました');
     }
-}
 
-  /**
-   * FAQ生成プレビュー
-   */
-  async previewGeneratedFAQ(appId: string, options: FAQGenerationOptions): Promise < FAQCluster[] > {
-    try {
-        return await this.faqClusteringService.previewFAQGeneration(appId, options);
-    } catch(error) {
-        throw new BadRequestException('FAQ生成プレビューに失敗しました');
+    /**
+     * FAQ生成プレビュー
+     */
+    async previewGeneratedFAQ(appId: string, options: FAQGenerationOptions): Promise<FAQCluster[]> {
+        try {
+            return await this.faqClusteringService.previewFAQGeneration(appId, options);
+        } catch (error) {
+            throw new BadRequestException('FAQ生成プレビューに失敗しました');
+        }
     }
-}
- /**
-   * FAQ静的サイト公開
-   */
-  async publishFAQSite(appId: string): Promise < string > {
-    try {
-        return await this.faqSiteService.publishFAQSite(appId);
-    } catch(error) {
-        throw new BadRequestException('FAQ静的サイト公開に失敗しました');
-    }
-}
 
-  /**
-   * FAQ更新時の自動サイト反映
-   */
-  async updateFAQSite(appId: string): Promise < string > {
-    try {
-        return await this.faqSiteService.updateFAQSite(appId);
-    } catch(error) {
-        throw new BadRequestException('FAQ自動サイト更新に失敗しました');
+    /**
+     * FAQ静的サイト公開
+     */
+    async publishFAQSite(appId: string): Promise<string> {
+        try {
+            const result = await this.faqSiteService.publishFAQSite({ appId });
+            return typeof result === 'string' ? result : result.siteUrl || '';
+        } catch (error) {
+            throw new BadRequestException('FAQ静的サイト公開に失敗しました');
+        }
     }
-}
 
-  /**
-   * FAQ公開サイト削除
-   */
-  async unpublishFAQSite(appId: string): Promise < void> {
-    try {
-        await this.faqSiteService.unpublishFAQSite(appId);
-    } catch(error) {
-        throw new BadRequestException('FAQ公開サイト削除に失敗しました');
+    /**
+     * FAQ更新時の自動サイト反映
+     */
+    async updateFAQSite(appId: string): Promise<string> {
+        try {
+            // updateFAQSiteメソッドが存在しない場合は、publishFAQSiteを使用
+            const result = await this.faqSiteService.publishFAQSite({ appId });
+            return typeof result === 'string' ? result : result.siteUrl || '';
+        } catch (error) {
+            throw new BadRequestException('FAQ自動サイト更新に失敗しました');
+        }
+    }
+
+    /**
+     * FAQ公開サイト削除
+     */
+    async unpublishFAQSite(appId: string): Promise<void> {
+        try {
+            await this.faqSiteService.unpublishFAQSite(appId);
+        } catch (error) {
+            throw new BadRequestException('FAQ公開サイト削除に失敗しました');
+        }
     }
 }

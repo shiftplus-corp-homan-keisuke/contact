@@ -13,7 +13,7 @@ import { CurrentUser } from '../../../common/decorators';
 import { User } from '../../users/entities';
 import { RealtimeNotificationService } from '../services';
 import { NotificationRequest } from '../types';
-import { ApiResponseDto } from '../../../common/dto';
+import { ApiResponseDto, ApiSuccessResponseDto } from '../../../common/dto';
 
 @ApiTags('realtime-notifications')
 @ApiBearerAuth()
@@ -29,7 +29,7 @@ export class RealtimeNotificationsController {
     @ApiResponse({
         status: HttpStatus.OK,
         description: '通知が正常に送信されました',
-        type: ApiResponseDto,
+        type: ApiSuccessResponseDto,
     })
     async sendInstantNotification(
         @Body() request: {
@@ -57,7 +57,7 @@ export class RealtimeNotificationsController {
     @ApiResponse({
         status: HttpStatus.OK,
         description: 'メンテナンス通知が正常に送信されました',
-        type: ApiResponseDto,
+        type: ApiSuccessResponseDto,
     })
     async sendMaintenanceNotification(
         @Body() request: {
@@ -83,7 +83,7 @@ export class RealtimeNotificationsController {
     @ApiResponse({
         status: HttpStatus.OK,
         description: 'リアルタイム通知の状態を取得しました',
-        type: ApiResponseDto,
+        type: ApiSuccessResponseDto,
     })
     async getRealtimeStatus(): Promise<ApiResponseDto<{
         connectedUsers: string[];
@@ -104,7 +104,7 @@ export class RealtimeNotificationsController {
     @ApiResponse({
         status: HttpStatus.OK,
         description: 'ユーザーのオンライン状態を取得しました',
-        type: ApiResponseDto,
+        type: ApiSuccessResponseDto,
     })
     async checkUserOnlineStatus(
         @Param('userId') userId: string,

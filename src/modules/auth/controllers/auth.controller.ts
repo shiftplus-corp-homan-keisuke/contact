@@ -18,8 +18,7 @@ import { AuthService } from '../services';
 import { LocalAuthGuard, JwtAuthGuard } from '../guards';
 import { LoginDto, RegisterDto, RefreshTokenDto } from '../dto';
 import { AuthResult, UserContext } from '../types';
-import { Public } from '../../../common/decorators/public.decorator';
-import { CurrentUser } from '../../../common/decorators/current-user.decorator';
+import { Public, CurrentUser } from '../../../common/decorators';
 
 @ApiTags('認証')
 @Controller('auth')

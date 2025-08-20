@@ -4,6 +4,9 @@ export interface FAQFilters {
     isPublished?: boolean;
     tags?: string[];
     search?: string;
+    offset?: number;
+    limit?: number;
+    page?: number;
 }
 
 export interface FAQAnalytics {

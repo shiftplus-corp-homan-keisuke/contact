@@ -4,7 +4,7 @@
  */
 
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { ApiKeyContext } from '../types/api-key.types';
+import { ApiKeyContext as ApiKeyContextType } from '../types/api-key.types';
 
 /**
  * APIキーコンテキストを取得するデコレーター
@@ -21,8 +21,8 @@ import { ApiKeyContext } from '../types/api-key.types';
  * }
  * ```
  */
-export const ApiKeyContext = createParamDecorator(
-    (data: keyof ApiKeyContext | undefined, ctx: ExecutionContext): ApiKeyContext | any => {
+export const GetApiKeyContext = createParamDecorator(
+    (data: keyof ApiKeyContextType | undefined, ctx: ExecutionContext): ApiKeyContextType | any => {
         const request = ctx.switchToHttp().getRequest();
         const apiKeyContext = request.apiKeyContext;
 
@@ -33,3 +33,6 @@ export const ApiKeyContext = createParamDecorator(
         return data ? apiKeyContext[data] : apiKeyContext;
     },
 );
+
+// 後方互換性のためのエイリアス
+export const ApiKeyContext = GetApiKeyContext;

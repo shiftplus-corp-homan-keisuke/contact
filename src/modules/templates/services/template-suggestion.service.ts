@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { Template, TemplateUsage } from '../entities';
 import { TemplatesRepository } from '../repositories';
 import { TemplateSuggestion } from '../types';
-import { SearchService } from '../../search/services';
+import { VectorService } from '../../search/services/vector.service';
 
 /**
  * テンプレート提案サービス
@@ -16,7 +16,7 @@ export class TemplateSuggestionService {
 
     constructor(
         private readonly templatesRepository: TemplatesRepository,
-        private readonly searchService: SearchService,
+        private readonly vectorService: VectorService,
         @InjectRepository(TemplateUsage)
         private readonly usageRepository: Repository<TemplateUsage>,
     ) { }
@@ -78,10 +78,10 @@ export class TemplateSuggestionService {
     ): Promise<TemplateSuggestion[]> {
         try {
             // 問い合わせ内容をベクトル化
-            const queryVector = await this.searchService.embedText(inquiryContent);
+            const queryVector = await this.vectorService.embedText(inquiryContent);
 
             // ベクトル検索でテンプレートを検索
-            const searchResults = await this.searchService.vectorSearch(
+            const searchResults = await this.vectorService.vectorSearch(
                 queryVector,
                 limit * 2, // 多めに取得してフィルタリング
             );
@@ -95,8 +95,8 @@ export class TemplateSuggestionService {
                 if (template && this.canUserAccessTemplate(template, userId)) {
                     suggestions.push({
                         template,
-                        score: result.vectorScore,
-                        reason: `類似度: ${(result.vectorScore * 100).toFixed(1)}%`,
+                        score: result.score,
+                        reason: `類似度: ${(result.score * 100).toFixed(1)}%`,
                     });
                 }
             }

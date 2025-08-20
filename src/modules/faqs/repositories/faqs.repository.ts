@@ -145,6 +145,10 @@ export class FAQsRepository {
             return queryBuilder;
         }
 
+        if (filters.appId) {
+            queryBuilder.andWhere('faq.appId = :appId', { appId: filters.appId });
+        }
+
         if (filters.isPublished !== undefined) {
             queryBuilder.andWhere('faq.isPublished = :isPublished', {
                 isPublished: filters.isPublished,
@@ -170,16 +174,7 @@ export class FAQsRepository {
             );
         }
 
-        if (filters.offset !== undefined) {
-            queryBuilder.offset(filters.offset);
-        }
-
-        if (filters.limit !== undefined) {
-            queryBuilder.limit(filters.limit);
-        }
-
         return queryBuilder;
-        await this.faqRepository.delete(id);
     }
 
     async findPublishedByAppId(appId: string): Promise<FAQ[]> {
@@ -224,38 +219,12 @@ export class FAQsRepository {
         return [...new Set(allTags)];
     }
 
-    private createFilteredQuery(filters?: FAQFilters): SelectQueryBuilder<FAQ> {
-        const queryBuilder = this.faqRepository
-            .createQueryBuilder('faq')
-            .leftJoinAndSelect('faq.application', 'application');
+    // TypeORMのRepository標準メソッドを追加
+    async count(options?: any): Promise<number> {
+        return this.faqRepository.count(options);
+    }
 
-        if (!filters) {
-            return queryBuilder;
-        }
-
-        if (filters.appId) {
-            queryBuilder.andWhere('faq.appId = :appId', { appId: filters.appId });
-        }
-
-        if (filters.category) {
-            queryBuilder.andWhere('faq.category = :category', { category: filters.category });
-        }
-
-        if (filters.isPublished !== undefined) {
-            queryBuilder.andWhere('faq.isPublished = :isPublished', { isPublished: filters.isPublished });
-        }
-
-        if (filters.tags && filters.tags.length > 0) {
-            queryBuilder.andWhere('faq.tags && :tags', { tags: filters.tags });
-        }
-
-        if (filters.search) {
-            queryBuilder.andWhere(
-                '(faq.question ILIKE :search OR faq.answer ILIKE :search)',
-                { search: `%${filters.search}%` }
-            );
-        }
-
-        return queryBuilder;
+    async find(options?: any): Promise<FAQ[]> {
+        return this.faqRepository.find(options);
     }
 }

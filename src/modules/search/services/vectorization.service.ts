@@ -115,7 +115,7 @@ export class VectorizationService {
             const metadata: VectorMetadata = {
                 id: faq.id,
                 type: 'faq',
-                appId: faq.applicationId,
+                appId: faq.application?.id || faq.appId,
                 category: faq.category,
                 createdAt: faq.createdAt.toISOString(),
                 title: faq.question,

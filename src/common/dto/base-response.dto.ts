@@ -66,20 +66,24 @@ export class BaseResponseDto<T = any> {
     @ApiProperty({ description: 'レスポンスデータ', required: false })
     data?: T;
 
+    @ApiProperty({ description: 'メッセージ', required: false })
+    message?: string;
+
     @ApiProperty({ description: 'エラー情報', required: false })
     error?: ErrorDto;
 
     @ApiProperty({ description: 'メタデータ', required: false })
     meta?: MetaDto;
 
-    constructor(data?: T, meta?: MetaDto) {
+    constructor(data?: T, meta?: MetaDto, message?: string) {
         this.success = true;
         this.data = data;
+        this.message = message;
         this.meta = meta || new MetaDto();
     }
 
-    static success<T>(data?: T, meta?: MetaDto): BaseResponseDto<T> {
-        return new BaseResponseDto(data, meta);
+    static success<T>(data?: T, meta?: MetaDto, message?: string): BaseResponseDto<T> {
+        return new BaseResponseDto(data, meta, message);
     }
 
     static error(error: ErrorDto): BaseResponseDto {

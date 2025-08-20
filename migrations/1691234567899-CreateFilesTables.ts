@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, Table, Index, ForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table, TableIndex, TableForeignKey } from 'typeorm';
 
 export class CreateFilesTables1691234567899 implements MigrationInterface {
     name = 'CreateFilesTables1691234567899';
@@ -211,48 +211,72 @@ export class CreateFilesTables1691234567899 implements MigrationInterface {
         // インデックスの作成
         await queryRunner.createIndex(
             'files',
-            new Index('IDX_files_inquiry_deleted', ['inquiryId', 'isDeleted'])
+            new TableIndex({
+                name: 'IDX_files_inquiry_deleted',
+                columnNames: ['inquiryId', 'isDeleted'],
+            })
         );
 
         await queryRunner.createIndex(
             'files',
-            new Index('IDX_files_uploader_created', ['uploadedBy', 'createdAt'])
+            new TableIndex({
+                name: 'IDX_files_uploader_created',
+                columnNames: ['uploadedBy', 'createdAt'],
+            })
         );
 
         await queryRunner.createIndex(
             'files',
-            new Index('IDX_files_mimetype_deleted', ['mimeType', 'isDeleted'])
+            new TableIndex({
+                name: 'IDX_files_mimetype_deleted',
+                columnNames: ['mimeType', 'isDeleted'],
+            })
         );
 
         await queryRunner.createIndex(
             'files',
-            new Index('IDX_files_hash', ['fileHash'])
+            new TableIndex({
+                name: 'IDX_files_hash',
+                columnNames: ['fileHash'],
+            })
         );
 
         await queryRunner.createIndex(
             'files',
-            new Index('IDX_files_scan_result', ['scanResult'])
+            new TableIndex({
+                name: 'IDX_files_scan_result',
+                columnNames: ['scanResult'],
+            })
         );
 
         await queryRunner.createIndex(
             'file_access_logs',
-            new Index('IDX_file_access_logs_file_created', ['fileId', 'createdAt'])
+            new TableIndex({
+                name: 'IDX_file_access_logs_file_created',
+                columnNames: ['fileId', 'createdAt'],
+            })
         );
 
         await queryRunner.createIndex(
             'file_access_logs',
-            new Index('IDX_file_access_logs_user_created', ['userId', 'createdAt'])
+            new TableIndex({
+                name: 'IDX_file_access_logs_user_created',
+                columnNames: ['userId', 'createdAt'],
+            })
         );
 
         await queryRunner.createIndex(
             'file_access_logs',
-            new Index('IDX_file_access_logs_action_created', ['action', 'createdAt'])
+            new TableIndex({
+                name: 'IDX_file_access_logs_action_created',
+                columnNames: ['action', 'createdAt'],
+            })
         );
 
         // 外部キー制約の作成
         await queryRunner.createForeignKey(
             'files',
-            new ForeignKey({
+            new TableForeignKey({
                 columnNames: ['inquiryId'],
                 referencedTableName: 'inquiries',
                 referencedColumnNames: ['id'],
@@ -263,7 +287,7 @@ export class CreateFilesTables1691234567899 implements MigrationInterface {
 
         await queryRunner.createForeignKey(
             'files',
-            new ForeignKey({
+            new TableForeignKey({
                 columnNames: ['uploadedBy'],
                 referencedTableName: 'users',
                 referencedColumnNames: ['id'],
@@ -274,7 +298,7 @@ export class CreateFilesTables1691234567899 implements MigrationInterface {
 
         await queryRunner.createForeignKey(
             'files',
-            new ForeignKey({
+            new TableForeignKey({
                 columnNames: ['deletedBy'],
                 referencedTableName: 'users',
                 referencedColumnNames: ['id'],
@@ -285,7 +309,7 @@ export class CreateFilesTables1691234567899 implements MigrationInterface {
 
         await queryRunner.createForeignKey(
             'file_access_logs',
-            new ForeignKey({
+            new TableForeignKey({
                 columnNames: ['fileId'],
                 referencedTableName: 'files',
                 referencedColumnNames: ['id'],
@@ -296,7 +320,7 @@ export class CreateFilesTables1691234567899 implements MigrationInterface {
 
         await queryRunner.createForeignKey(
             'file_access_logs',
-            new ForeignKey({
+            new TableForeignKey({
                 columnNames: ['userId'],
                 referencedTableName: 'users',
                 referencedColumnNames: ['id'],

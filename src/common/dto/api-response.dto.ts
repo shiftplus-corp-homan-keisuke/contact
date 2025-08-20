@@ -224,3 +224,9 @@ export const API_ERROR_CODES = {
 } as const;
 
 export type ApiErrorCode = typeof API_ERROR_CODES[keyof typeof API_ERROR_CODES];
+
+/**
+ * 汎用APIレスポンス型エイリアス
+ * 設計文書に従い、ApiSuccessResponseDtoのエイリアスとして定義
+ */
+export type ApiResponseDto<T = any> = ApiSuccessResponseDto<T>;

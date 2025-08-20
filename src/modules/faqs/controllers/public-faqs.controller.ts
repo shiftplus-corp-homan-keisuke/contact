@@ -11,9 +11,6 @@ import {
     Query,
     HttpStatus,
     ParseUUIDPipe,
-    UseInterceptors,
-    CacheInterceptor,
-    CacheTTL,
     Logger,
 } from '@nestjs/common';
 import {
@@ -30,11 +27,11 @@ import {
     ApiSuccessResponseDto,
     PaginatedApiResponseDto
 } from '../../../common/dto/api-response.dto';
-import { Public } from '../../../common/decorators/public.decorator';
+import { Public } from '../../../common/decorators';
 
 @ApiTags('Public FAQs')
 @Controller('api/v1/public/faqs')
-@UseInterceptors(CacheInterceptor)
+// @UseInterceptors(CacheInterceptor) // キャッシュ機能は一時的に無効化
 export class PublicFAQsController {
     private readonly logger = new Logger(PublicFAQsController.name);
 
@@ -47,7 +44,7 @@ export class PublicFAQsController {
      */
     @Get('apps/:appId')
     @Public() // 認証不要
-    @CacheTTL(300) // 5分間キャッシュ
+    // @CacheTTL(300) // 5分間キャッシュ - 一時的に無効化
     @ApiOperation({
         summary: 'アプリ別公開FAQ一覧取得',
         description: '指定されたアプリケーションの公開済みFAQ一覧を取得します。認証は不要です。'
@@ -126,7 +123,7 @@ export class PublicFAQsController {
      */
     @Get(':id')
     @Public() // 認証不要
-    @CacheTTL(300) // 5分間キャッシュ
+    // @CacheTTL(300) // 5分間キャッシュ - 一時的に無効化
     @ApiOperation({
         summary: 'FAQ詳細取得',
         description: '指定されたIDの公開済みFAQ詳細を取得します。認証は不要です。'
@@ -166,7 +163,7 @@ export class PublicFAQsController {
      */
     @Get('apps/:appId/search')
     @Public() // 認証不要
-    @CacheTTL(60) // 1分間キャッシュ（検索結果は短めに）
+    // @CacheTTL(60) // 1分間キャッシュ（検索結果は短めに） - 一時的に無効化
     @ApiOperation({
         summary: 'FAQ検索',
         description: '指定されたアプリケーションの公開済みFAQを検索します。認証は不要です。'
@@ -248,7 +245,7 @@ export class PublicFAQsController {
      */
     @Get('apps/:appId/categories')
     @Public() // 認証不要
-    @CacheTTL(600) // 10分間キャッシュ
+    // @CacheTTL(600) // 10分間キャッシュ - 一時的に無効化
     @ApiOperation({
         summary: 'FAQカテゴリ一覧取得',
         description: '指定されたアプリケーションの公開済みFAQのカテゴリ一覧を取得します。'
@@ -284,7 +281,7 @@ export class PublicFAQsController {
      */
     @Get('apps/:appId/popular')
     @Public() // 認証不要
-    @CacheTTL(1800) // 30分間キャッシュ
+    // @CacheTTL(1800) // 30分間キャッシュ - 一時的に無効化
     @ApiOperation({
         summary: '人気FAQ一覧取得',
         description: '指定されたアプリケーションの人気FAQ一覧を取得します。アクセス数に基づいてランキングされます。'
@@ -330,7 +327,7 @@ export class PublicFAQsController {
      */
     @Get('apps/:appId/recent')
     @Public() // 認証不要
-    @CacheTTL(300) // 5分間キャッシュ
+    // @CacheTTL(300) // 5分間キャッシュ - 一時的に無効化
     @ApiOperation({
         summary: '最新FAQ一覧取得',
         description: '指定されたアプリケーションの最新FAQ一覧を取得します。更新日時順でソートされます。'

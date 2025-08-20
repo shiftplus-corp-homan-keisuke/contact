@@ -8,7 +8,7 @@ import {
     UseGuards,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
-import { CurrentUser } from '../../../common/decorators/current-user.decorator';
+import { CurrentUser } from '../../../common/decorators';
 import { FileSecurityService } from '../services/file-security.service';
 import { FileScanDto } from '../dto';
 import { FileScanResult } from '../types';

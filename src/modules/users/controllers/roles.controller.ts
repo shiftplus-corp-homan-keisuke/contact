@@ -18,7 +18,7 @@ import { PermissionsGuard } from '../guards/permissions.guard';
 import { CreateRoleDto, UpdateRoleDto, CheckPermissionDto, CheckMultiplePermissionsDto } from '../dto/role.dto';
 import { Role } from '../entities/role.entity';
 import { RequireSystemAdmin, Permission } from '../decorators/permissions.decorator';
-import { CurrentUser } from '../../../common/decorators/current-user.decorator';
+import { CurrentUser } from '../../../common/decorators';
 import { UserContext } from '../../auth/types/auth.types';
 
 @ApiTags('役割管理')

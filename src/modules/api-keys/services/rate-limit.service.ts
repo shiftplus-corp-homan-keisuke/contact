@@ -137,4 +137,110 @@ export class RateLimitService {
         const crypto = require('crypto');
         return crypto.createHash('sha256').update(key).digest('hex');
     }
+    /**
+     * レート制限違反を検出
+     */
+    async detectRateLimitViolations(): Promise<any[]> {
+        try {
+            // 過去1時間のレート制限違反を検出
+            const oneHourAgo = new Date(Date.now() - 3600000);
+
+            const violations = await this.rateLimitRepository
+                .createQueryBuilder('tracking')
+                .select('tracking.keyHash')
+                .addSelect('COUNT(*)', 'requestCount')
+                .where('tracking.timestamp > :oneHourAgo', { oneHourAgo })
+                .groupBy('tracking.keyHash')
+                .having('COUNT(*) > :threshold', { threshold: 1000 }) // 1時間に1000リクエスト以上
+                .getRawMany();
+
+            return violations.map(violation => ({
+                keyHash: violation.keyHash,
+                requestCount: parseInt(violation.requestCount),
+                detectedAt: new Date(),
+                severity: 'high',
+            }));
+
+        } catch (error) {
+            this.logger.error(`レート制限違反検出エラー: ${error.message}`, error.stack);
+            return [];
+        }
+    }
+
+    /**
+     * 疑わしいパターンを検出
+     */
+    async detectSuspiciousPatterns(): Promise<any[]> {
+        try {
+            // 短時間での大量リクエストを検出
+            const fiveMinutesAgo = new Date(Date.now() - 300000);
+
+            const suspiciousPatterns = await this.rateLimitRepository
+                .createQueryBuilder('tracking')
+                .select('tracking.keyHash')
+                .addSelect('COUNT(*)', 'requestCount')
+                .where('tracking.timestamp > :fiveMinutesAgo', { fiveMinutesAgo })
+                .groupBy('tracking.keyHash')
+                .having('COUNT(*) > :threshold', { threshold: 100 }) // 5分間に100リクエスト以上
+                .getRawMany();
+
+            return suspiciousPatterns.map(pattern => ({
+                keyHash: pattern.keyHash,
+                requestCount: parseInt(pattern.requestCount),
+                timeWindow: '5 minutes',
+                detectedAt: new Date(),
+                type: 'burst_requests',
+            }));
+
+        } catch (error) {
+            this.logger.error(`疑わしいパターン検出エラー: ${error.message}`, error.stack);
+            return [];
+        }
+    }
+
+    /**
+     * 使用レポートを生成
+     */
+    async generateUsageReport(days: number = 7): Promise<any> {
+        try {
+            const startDate = new Date(Date.now() - days * 24 * 3600000);
+
+            const usageData = await this.rateLimitRepository
+                .createQueryBuilder('tracking')
+                .select('tracking.keyHash')
+                .addSelect('DATE(tracking.timestamp)', 'date')
+                .addSelect('COUNT(*)', 'requestCount')
+                .where('tracking.timestamp > :startDate', { startDate })
+                .groupBy('tracking.keyHash, DATE(tracking.timestamp)')
+                .orderBy('DATE(tracking.timestamp)', 'DESC')
+                .getRawMany();
+
+            // データを整理
+            const report = {
+                period: {
+                    startDate,
+                    endDate: new Date(),
+                    days,
+                },
+                summary: {
+                    totalRequests: usageData.reduce((sum, item) => sum + parseInt(item.requestCount), 0),
+                    uniqueKeys: new Set(usageData.map(item => item.keyHash)).size,
+                    averageRequestsPerDay: 0,
+                },
+                dailyUsage: usageData,
+            };
+
+            report.summary.averageRequestsPerDay = Math.round(report.summary.totalRequests / days);
+
+            return report;
+
+        } catch (error) {
+            this.logger.error(`使用レポート生成エラー: ${error.message}`, error.stack);
+            return {
+                period: { startDate: new Date(), endDate: new Date(), days },
+                summary: { totalRequests: 0, uniqueKeys: 0, averageRequestsPerDay: 0 },
+                dailyUsage: [],
+            };
+        }
+    }
 }

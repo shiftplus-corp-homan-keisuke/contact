@@ -15,7 +15,18 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags, ApiOperation, ApiResponse, ApiConsumes, ApiBearerAuth } from '@nestjs/swagger';
 import { Response } from 'express';
-import { CurrentUser } from '../../../common/decorators/current-user.decorator';
+
+// Multerファイル型定義
+interface MulterFile {
+    fieldname: string;
+    originalname: string;
+    encoding: string;
+    mimetype: string;
+    size: number;
+    buffer: Buffer;
+    filename?: string;
+}
+import { CurrentUser } from '../../../common/decorators';
 import { FilesService } from '../services';
 import {
     FileUploadDto,
@@ -48,7 +59,7 @@ export class FilesController {
     })
     @UseInterceptors(FileInterceptor('file'))
     async uploadFile(
-        @UploadedFile() file: Express.Multer.File,
+        @UploadedFile() file: MulterFile,
         @Body() uploadDto: FileUploadDto,
         @CurrentUser() user: any,
     ): Promise<{ success: boolean; data: FileMetadata }> {

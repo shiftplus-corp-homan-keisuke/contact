@@ -104,8 +104,7 @@ export interface RealTimeUpdate {
     data: any;
     timestamp: Date;
 }
-// パ
-フォーマンス分析関連の型定義
+// パフォーマンス分析関連の型定義
 export interface UserPerformance {
     userId: string;
     userName: string;
@@ -206,8 +205,9 @@ export interface ReportSchedule {
     time: string; // HH:mm format
     recipients: string[];
     enabled: boolean;
-}// 予
-測分析関連の型定義
+}
+
+// 予測分析関連の型定義
 export interface PredictionData {
     metric: string;
     period: 'daily' | 'weekly' | 'monthly';

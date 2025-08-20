@@ -47,6 +47,7 @@ export class CreateTemplateVariableDto {
 
     @ApiPropertyOptional({ description: '表示順序' })
     @IsOptional()
+    @Type(() => Number)
     orderIndex?: number;
 }
 

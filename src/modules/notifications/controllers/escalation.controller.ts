@@ -12,8 +12,8 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagg
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../users/guards/roles.guard';
 import { Roles } from '../../users/decorators/roles.decorator';
-import { CurrentUser } from '../../common/decorators/current-user.decorator';
-import { ApiResponseDto } from '../../common/dto/api-response.dto';
+import { CurrentUser } from '../../../common/decorators';
+import { ApiResponseDto } from '../../../common/dto/api-response.dto';
 import { EscalationService } from '../services/escalation.service';
 import { EscalateInquiryDto, EscalationStatsDto } from '../dto/escalation.dto';
 import { User } from '../../users/entities/user.entity';
